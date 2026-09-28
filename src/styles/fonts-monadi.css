@@ -1,0 +1,15 @@
+/*
+ * Monadi (منادي) — ضع الملف في public/fonts/Monadi.ttf
+ * مصدر مقترح: arfonts.net/monadi-font (تحميل رسمي للخط)
+ */
+@font-face {
+  font-family: Monadi;
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src:
+    local('Monadi'),
+    local('Monadi Regular'),
+    local('منادي'),
+    url('/fonts/Monadi.ttf') format('truetype');
+}

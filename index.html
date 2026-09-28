@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/png" href="/brand/mark.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="theme-color" content="#F5F5F1" />
+    <script>
+      try {
+        if (localStorage.getItem('al-bayed-theme') === 'dark') {
+          document.documentElement.classList.add('dark')
+          document.documentElement.style.colorScheme = 'dark'
+          document.querySelector('meta[name="theme-color"]')?.setAttribute('content', '#111210')
+        }
+      } catch (e) {}
+    </script>
+    <meta
+      name="description"
+      content="كتالوج مبيعات البايض B2B — بحث وفلاتر للمواصفات والتوفر لاستخدام المندوبين مع العملاء والمشاريع."
+    />
+    <title>البايض | كتالوج المبيعات</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
