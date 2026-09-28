@@ -1473,7 +1473,6 @@
     flex-direction: column;
     gap: var(--space-1);
     padding: var(--space-4) var(--space-4) var(--space-5);
-    border-top: 1px solid color-mix(in srgb, var(--border) 90%, transparent);
   }
   @media (min-width: 768px) {
     .catalog-card__meta {
@@ -2126,7 +2125,6 @@
   }
   .catalog-card--skeleton .catalog-card__meta {
     gap: var(--space-2);
-    border-top: 1px solid var(--border);
   }
   .skeleton-line {
     height: 0.65rem;
