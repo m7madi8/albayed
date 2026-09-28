@@ -1,6 +1,7 @@
-import { Link } from 'react-router-dom'
-import { Trash2 } from 'lucide-react'
+import { Link, useNavigate } from 'react-router-dom'
+import { Send, Trash2 } from 'lucide-react'
 import { useVisitOrder, buildOrderText } from '../../context/VisitOrderContext'
+import { submitSubmittedOrder } from '../../lib/submittedOrders'
 import { getProductById } from '../../lib/catalog'
 import { formatUnitPrice, lineTotal } from '../../lib/customerPricing'
 import { ORDER_UNIT_LABEL, lineKey } from '../../lib/orderUnits'
@@ -15,6 +16,7 @@ export default function VisitOrderReview({
   variant?: 'catalog' | 'dashboard'
   showToast?: (msg: string) => void
 }) {
+  const navigate = useNavigate()
   const {
     hasClient,
     clientName,
@@ -25,13 +27,14 @@ export default function VisitOrderReview({
     orderTotal,
     setLineQuantity,
     removeLine,
+    clearOrder,
   } = useVisitOrder()
 
   const resolved = lines
     .map((l) => ({ line: l, product: getProductById(l.productId) }))
     .filter((x) => x.product)
 
-  const confirm = async () => {
+  const copySummary = async () => {
     if (!hasClient || lines.length === 0) return
     const text = buildOrderText(clientName, clientPhone, lines, resolved.map((r) => r.product))
     try {
@@ -40,6 +43,19 @@ export default function VisitOrderReview({
     } catch {
       window.alert(text)
     }
+  }
+
+  const sendForReview = () => {
+    if (!hasClient || lines.length === 0) return
+    submitSubmittedOrder(
+      clientName,
+      clientPhone,
+      lines,
+      resolved.map((r) => r.product),
+    )
+    clearOrder()
+    showToast?.('تم إرسال الطلبية للمراجعة')
+    navigate('/dashboard/orders')
   }
 
   const catalogBack = variant === 'catalog'
@@ -126,20 +142,20 @@ export default function VisitOrderReview({
           <button
             type="button"
             disabled={!hasClient || lineCount === 0}
-            onClick={confirm}
-            className={btn('primary', 'h-12 w-full rounded-[12px] text-[15px]')}
+            onClick={sendForReview}
+            className={btn('primary', 'flex h-12 w-full items-center justify-center gap-2 rounded-[12px] text-[15px]')}
           >
-            تأكيد ونسخ ملخص العرض
+            <Send size={18} aria-hidden />
+            إرسال الطلبية
           </button>
-          {variant === 'dashboard' && (
-            <p className="mt-3 text-center text-[12px] text-foreground-muted">
-              أو استخدم{' '}
-              <Link to="/visit-order" className="text-accent-dark underline-offset-2 hover:underline">
-                عرض الزيارة
-              </Link>{' '}
-              أثناء الاجتماع مع العميل.
-            </p>
-          )}
+          <button
+            type="button"
+            disabled={!hasClient || lineCount === 0}
+            onClick={copySummary}
+            className={btn('secondary', 'mt-3 h-11 w-full rounded-[12px] text-[14px]')}
+          >
+            نسخ ملخص العرض
+          </button>
         </div>
       </div>
     </div>

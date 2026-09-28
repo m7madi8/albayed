@@ -20,6 +20,7 @@ import { APP_NAV, DASHBOARD_NAV, type DashboardNavChild, type DashboardNavItem }
 import { BRAND_LOGO_FULL, BRAND_LOGO_ON_DARK } from '../../lib/brandAssets'
 import { EASE_OUT } from '../../lib/motionPresets'
 import { useVisitOrder } from '../../context/VisitOrderContext'
+import { useSubmittedOrders } from '../../hooks/useSubmittedOrders'
 import { useTheme } from '../../context/ThemeContext'
 import ThemeToggle from '../ui/ThemeToggle'
 
@@ -102,12 +103,14 @@ function NavBlock({
   pathname,
   search,
   ordersBadge,
+  pendingOrders,
   onNavigate,
 }: {
   items: DashboardNavItem[]
   pathname: string
   search: string
   ordersBadge: number
+  pendingOrders: number
   onNavigate: () => void
 }) {
   return (
@@ -116,7 +119,12 @@ function NavBlock({
         const Icon = item.icon ? ICONS[item.icon] : LayoutDashboard
         const active = itemActive(pathname, search, item)
         const showChildren = item.children && item.children.length > 0 && active
-        const badge = (item.id === 'order' || item.id === 'orders') && ordersBadge > 0 ? ordersBadge : undefined
+        const badge =
+          item.id === 'orders' && pendingOrders > 0
+            ? pendingOrders
+            : item.id === 'order' && ordersBadge > 0
+              ? ordersBadge
+              : undefined
 
         return (
           <div key={item.id} className="rep-nav-group">
@@ -194,6 +202,7 @@ export default function SalesRepSidebar({ open, onClose }: { open: boolean; onCl
   const reduce = useReducedMotion()
   const { pathname, search } = useLocation()
   const { lineCount } = useVisitOrder()
+  const { pendingCount } = useSubmittedOrders()
   const { theme } = useTheme()
   const logoSrc = theme === 'dark' ? BRAND_LOGO_ON_DARK : BRAND_LOGO_FULL
 
@@ -252,6 +261,7 @@ export default function SalesRepSidebar({ open, onClose }: { open: boolean; onCl
                       pathname={pathname}
                       search={search}
                       ordersBadge={lineCount}
+                      pendingOrders={pendingCount}
                       onNavigate={onNavigate}
                     />
                   </div>
@@ -265,6 +275,7 @@ export default function SalesRepSidebar({ open, onClose }: { open: boolean; onCl
                       pathname={pathname}
                       search={search}
                       ordersBadge={lineCount}
+                      pendingOrders={pendingCount}
                       onNavigate={onNavigate}
                     />
                   </div>

@@ -5,11 +5,13 @@ import { salesOsNavActive } from '../../data/salesOsNav'
 import { BRAND_LOGO_FULL, BRAND_LOGO_ON_DARK } from '../../lib/brandAssets'
 import { useTheme } from '../../context/ThemeContext'
 import { useVisitOrder } from '../../context/VisitOrderContext'
+import { useSubmittedOrders } from '../../hooks/useSubmittedOrders'
 
 export default function SalesOsSidebar({ onSearch }: { onSearch: () => void }) {
   const { pathname } = useLocation()
   const { theme } = useTheme()
   const { lineCount } = useVisitOrder()
+  const { pendingCount } = useSubmittedOrders()
   const logo = theme === 'dark' ? BRAND_LOGO_ON_DARK : BRAND_LOGO_FULL
 
   return (
@@ -29,7 +31,12 @@ export default function SalesOsSidebar({ onSearch }: { onSearch: () => void }) {
         <nav className="sales-os-nav">
           {SALES_OS_NAV.map((item) => {
             const active = salesOsNavActive(pathname, item.href, item.end)
-            const badge = item.id === 'products' && lineCount > 0 ? lineCount : undefined
+            const badge =
+              item.id === 'products' && lineCount > 0
+                ? lineCount
+                : item.id === 'orders' && pendingCount > 0
+                  ? pendingCount
+                  : undefined
             const Icon = item.icon
             return (
               <Link

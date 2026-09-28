@@ -39,6 +39,7 @@ export const DASHBOARD_NAV: DashboardNavItem[] = [
     icon: 'users',
     children: [{ id: 'customers-new', label: 'إنشاء عميل جديد', href: '/dashboard/customers?new=1', icon: 'user-plus' }],
   },
+  { id: 'orders', label: 'الطلبيات', href: '/dashboard/orders', icon: 'clipboard-list' },
 ]
 
 export function dashboardItemLabel(id: string): string | undefined {
