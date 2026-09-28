@@ -243,6 +243,8 @@
     font-family: var(--font-sans);
     -webkit-text-size-adjust: 100%;
     scroll-padding-top: calc(4rem + env(safe-area-inset-top, 0px));
+    /* منع ارتداد السكرول فوق/تحت حدود الصفحة — السكرول العادي داخل المحتوى يبقى كما هو */
+    overscroll-behavior-y: none;
   }
   body {
     margin: 0;
@@ -256,6 +258,10 @@
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
     overflow-x: hidden;
+    overscroll-behavior-y: none;
+  }
+  #root {
+    overscroll-behavior-y: none;
   }
   h1 {
     margin: 0;
