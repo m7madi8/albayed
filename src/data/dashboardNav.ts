@@ -27,7 +27,6 @@ export interface DashboardNavItem {
 export const APP_NAV: DashboardNavItem[] = [
   { id: 'home', label: 'الرئيسية', href: '/', icon: 'home', end: true },
   { id: 'sales-os', label: 'نظام المبيعات', href: '/dashboard/overview', icon: 'layout-dashboard' },
-  { id: 'visit-order', label: 'طلبية زيارة', href: '/dashboard/order', icon: 'shopping-bag' },
 ]
 
 /** أقسام لوحة المندوب — متزامنة مع salesOsNav */
@@ -40,7 +39,6 @@ export const DASHBOARD_NAV: DashboardNavItem[] = [
     icon: 'users',
     children: [{ id: 'customers-new', label: 'إنشاء عميل جديد', href: '/dashboard/customers?new=1', icon: 'user-plus' }],
   },
-  { id: 'order', label: 'طلبية', href: '/dashboard/order', icon: 'clipboard-list' },
 ]
 
 export function dashboardItemLabel(id: string): string | undefined {

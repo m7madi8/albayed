@@ -18,5 +18,3 @@ export function brassProductImage(slug: string): string | undefined {
   return file ? `${BRASS_MEDIA_BASE}/${file}` : undefined
 }
 
-/** غلاف قسم النحاس في الرئيسية والهيرو */
-export const BRASS_SECTION_COVER_IMAGE = `${BRASS_MEDIA_BASE}/1.webp`

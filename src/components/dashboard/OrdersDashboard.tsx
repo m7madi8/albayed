@@ -29,8 +29,8 @@ export default function OrdersDashboard() {
         <p className="mt-2 max-w-md text-[14px] leading-7 text-foreground-muted">
           طلبيات الزيارة تُحفظ محليًا حتى تُنسخ للمكتب. ابدأ طلبية جديدة أمام العميل.
         </p>
-        <Link to="/dashboard/order" className={btn('primary', 'mt-6 h-11 rounded-[10px] px-6 text-[14px]')}>
-          بدء طلبية زيارة
+        <Link to="/products" className={btn('primary', 'mt-6 h-11 rounded-[10px] px-6 text-[14px]')}>
+          فتح الكتالوج
         </Link>
       </div>
     )
@@ -61,8 +61,8 @@ export default function OrdersDashboard() {
       </ul>
 
       <div className="mt-6 flex flex-wrap gap-3">
-        <Link to="/dashboard/order" className={btn('primary', 'h-11 rounded-[10px] px-5 text-[14px]')}>
-          تعديل في مساحة الطلب
+        <Link to="/visit-order" className={btn('primary', 'h-11 rounded-[10px] px-5 text-[14px]')}>
+          مراجعة في الكتالوج
         </Link>
         <button
           type="button"

@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react'
-import { Outlet, useLocation } from 'react-router-dom'
+import { Outlet } from 'react-router-dom'
 import SalesOsSidebar from './SalesOsSidebar'
 import SalesOsTopBar from './SalesOsTopBar'
 import SalesOsBottomNav from './SalesOsBottomNav'
@@ -13,10 +13,8 @@ export default function SalesOsLayout() {
   const [searchOpen, setSearchOpen] = useState(false)
   const [toast, setToast] = useState<string | null>(null)
   const openSearch = useCallback(() => setSearchOpen(true), [])
-  const { pathname } = useLocation()
   const { lineCount } = useVisitOrder()
-  const isOrderWorkspace = pathname === '/dashboard/order' || pathname.startsWith('/dashboard/order/')
-  const hideVisitBar = isOrderWorkspace || lineCount === 0
+  const hideVisitBar = lineCount === 0
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
@@ -37,7 +35,7 @@ export default function SalesOsLayout() {
           <div className="sales-os-main flex min-h-dvh min-w-0 flex-1 flex-col">
             <SalesOsTopBar onSearch={openSearch} />
             <main
-              className={`sales-os-content flex-1${hideVisitBar ? '' : ' sales-os-content--order-pad'}${isOrderWorkspace ? ' sales-os-content--workspace' : ''}`}
+              className={`sales-os-content flex-1${hideVisitBar ? '' : ' sales-os-content--order-pad'}`}
             >
               <div className="sales-os-page">
                 <Outlet context={{ showToast: (msg: string) => setToast(msg) }} />

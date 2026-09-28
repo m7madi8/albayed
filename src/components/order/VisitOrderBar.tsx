@@ -14,7 +14,7 @@ export default function VisitOrderBar() {
   const shellClass = isCatalogRoute ? 'catalog-shell' : 'container-x'
   const reduce = useReducedMotion()
 
-  if (lineCount === 0 || pathname === '/dashboard/order' || pathname === '/visit-order') return null
+  if (lineCount === 0 || pathname === '/visit-order') return null
 
   const inner = (
     <div className={`${shellClass} visit-order-bar-inner`}>

@@ -24,7 +24,7 @@ export default function SalesOsBottomNav({ onSearch }: { onSearch: () => void })
           )
         }
         const active = salesOsNavActive(pathname, item.href, item.end)
-        const badge = item.id === 'order' && lineCount > 0 ? lineCount : undefined
+        const badge = item.id === 'products' && lineCount > 0 ? lineCount : undefined
         return (
           <Link
             key={item.id}

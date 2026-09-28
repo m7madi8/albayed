@@ -29,7 +29,7 @@ export default function SalesOsSidebar({ onSearch }: { onSearch: () => void }) {
         <nav className="sales-os-nav">
           {SALES_OS_NAV.map((item) => {
             const active = salesOsNavActive(pathname, item.href, item.end)
-            const badge = item.id === 'order' && lineCount > 0 ? lineCount : undefined
+            const badge = item.id === 'products' && lineCount > 0 ? lineCount : undefined
             const Icon = item.icon
             return (
               <Link

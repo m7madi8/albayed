@@ -1,5 +1,3 @@
-import { BRASS_SECTION_COVER_IMAGE } from './brassProductPhotos'
-
 /** Approved brand files under /public/brand */
 export const BRAND_LOGO_FULL = '/brand/logo-black.png'
 export const BRAND_LOGO_ON_DARK = '/brand/logo-on-dark.png'
@@ -20,12 +18,12 @@ export const PIPES_HERO_WIDTH = 3840
 export const PIPES_HERO_HEIGHT = 2149
 export const PIPES_HERO_FALLBACK_WIDTH = 2048
 
-/** Brass section — غلاف من صور المنتجات */
-export const BRASS_HERO_IMAGE = BRASS_SECTION_COVER_IMAGE
-export const BRASS_HERO_IMAGE_FALLBACK = BRASS_SECTION_COVER_IMAGE
-export const BRASS_HERO_WIDTH = 1600
-export const BRASS_HERO_HEIGHT = 1200
-export const BRASS_HERO_FALLBACK_WIDTH = 1200
+/** Brass section (warehouse) */
+export const BRASS_HERO_IMAGE = '/brand/hero-brass-4k.jpg'
+export const BRASS_HERO_IMAGE_FALLBACK = '/brand/hero-brass-2k.jpg'
+export const BRASS_HERO_WIDTH = 3840
+export const BRASS_HERO_HEIGHT = 2550
+export const BRASS_HERO_FALLBACK_WIDTH = 2048
 
 export type HeroBackground = 'default' | 'pipes' | 'brass'
 

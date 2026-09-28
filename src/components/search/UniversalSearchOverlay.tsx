@@ -121,7 +121,7 @@ export default function UniversalSearchOverlay({ open, onClose }: { open: boolea
                 <h2 className="mb-3 text-[12px] font-medium tracking-wide text-foreground-muted">طلبية نشطة</h2>
                 <button
                   type="button"
-                  onClick={() => go('/dashboard/order')}
+                  onClick={() => go('/visit-order')}
                   className="ios-tile flex w-full items-center gap-3 px-4 py-4 text-right"
                 >
                   <ClipboardList size={20} className="text-accent" aria-hidden />

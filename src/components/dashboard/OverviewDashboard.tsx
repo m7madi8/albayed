@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { ClipboardList, Plus, Search, Users } from 'lucide-react'
+import { Package, Plus, Search, Users } from 'lucide-react'
 import { loadAllClients } from '../../lib/customClients'
 import { useVisitOrder } from '../../context/VisitOrderContext'
 import { btn } from '../../lib/buttonStyles'
@@ -21,9 +21,9 @@ export default function OverviewDashboard() {
           </p>
         </div>
         <div className="sales-os-quick-actions">
-          <Link to="/dashboard/order" className={btn('primary', 'sales-os-action-btn gap-2')}>
-            <ClipboardList size={18} aria-hidden />
-            طلبية جديدة
+          <Link to="/products" className={btn('primary', 'sales-os-action-btn gap-2')}>
+            <Package size={18} aria-hidden />
+            فتح الكتالوج
           </Link>
           <Link to="/dashboard/customers?new=1" className={btn('secondary', 'sales-os-action-btn gap-2')}>
             <Plus size={18} aria-hidden />
@@ -47,16 +47,16 @@ export default function OverviewDashboard() {
                   {lineCount} صنف · {unitCount} وحدة
                 </p>
                 <p className="mt-1 truncate text-[14px] text-foreground-muted">{clientLabel ?? 'حدّد العميل في الطلبية'}</p>
-                <Link to="/dashboard/order" className={btn('primary', 'mt-4 h-11 w-full rounded-[10px] text-[14px]')}>
-                  متابعة الطلبية
+                <Link to="/visit-order" className={btn('primary', 'mt-4 h-11 w-full rounded-[10px] text-[14px]')}>
+                  مراجعة الطلبية
                 </Link>
               </>
             ) : (
               <>
                 <p className="mt-2 text-[15px] text-foreground">لا توجد طلبية مفتوحة</p>
-                <p className="mt-1 text-[14px] text-foreground-muted">ابدأ باختيار العميل ثم أضف الأصناف.</p>
-                <Link to="/dashboard/order" className={btn('secondary', 'mt-4 h-11 w-full rounded-[10px] text-[14px]')}>
-                  بدء طلبية
+                <p className="mt-1 text-[14px] text-foreground-muted">حدّد العميل من الكتالوج ثم أضف الأصناف.</p>
+                <Link to="/products" className={btn('secondary', 'mt-4 h-11 w-full rounded-[10px] text-[14px]')}>
+                  فتح الكتالوج
                 </Link>
               </>
             )}
