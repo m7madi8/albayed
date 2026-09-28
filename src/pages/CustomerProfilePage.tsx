@@ -27,7 +27,7 @@ export default function CustomerProfilePage() {
   const startOrder = () => {
     if (!hasPhone) return
     setOrderClient(client.name, client.phone)
-    navigate('/dashboard/order')
+    navigate('/products')
   }
 
   const savePhone = (phone: string) => {
@@ -61,7 +61,9 @@ export default function CustomerProfilePage() {
         <>
           <section className="mt-8" aria-labelledby="orders-heading">
             <h2 id="orders-heading" className="text-[13px] font-medium text-foreground-muted">الطلبيات</h2>
-            <p className="mt-2 text-[14px] text-foreground-muted">ابنِ طلبية زيارة جديدة لهذا العميل — تُربط تلقائيًا باسم الشركة والهاتف.</p>
+            <p className="mt-2 text-[14px] text-foreground-muted">
+              يفتح الكتالوج لاختيار الأصناف — يُربط العميل تلقائيًا باسم الشركة والهاتف.
+            </p>
             <button
               type="button"
               onClick={startOrder}
