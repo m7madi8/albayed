@@ -12,9 +12,23 @@ export const FILTER_KEYS = {
   country: CATALOG_COUNTRY_FILTER_KEY,
 } as const
 
-/** الكتالوج — فلتر البلد فقط (التصنيف عبر التبويبات أعلى الصفحة). */
-export function catalogFacetDefs(_scopedCategory?: boolean): FilterDef[] {
-  return [catalogCountryFilterDef]
+/** Country + category-specific facets when a family is selected. */
+export function catalogFacetDefs(sp: URLSearchParams): FilterDef[] {
+  const { categoryId } = resolveCategoryScope(sp)
+  const cat = categoryId ? categoryById(categoryId) : null
+  const categoryFilters = cat?.filters ?? []
+  const keys = new Set<string>([catalogCountryFilterDef.key])
+  const merged = [catalogCountryFilterDef]
+  for (const def of categoryFilters) {
+    if (keys.has(def.key)) continue
+    keys.add(def.key)
+    merged.push(def)
+  }
+  return merged
+}
+
+export function catalogHasFacetOptions(facets: { options: { count: number }[] }[]): boolean {
+  return facets.some((f) => f.options.some((o) => o.count > 0))
 }
 
 export function resolveCategoryScope(sp: URLSearchParams): { slug: string | null; categoryId: string | null } {

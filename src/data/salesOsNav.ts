@@ -1,5 +1,5 @@
 import type { LucideIcon } from 'lucide-react'
-import { ClipboardList, LayoutDashboard, Package, Search, Settings, Users } from 'lucide-react'
+import { ClipboardList, LayoutDashboard, Package, Receipt, Search, Settings, Users } from 'lucide-react'
 
 export interface SalesOsNavItem {
   id: string
@@ -12,10 +12,10 @@ export interface SalesOsNavItem {
   mobile?: boolean
 }
 
-/** أقسام منشورة فقط — بدون وحدات غير مكتملة */
 export const SALES_OS_NAV: SalesOsNavItem[] = [
   { id: 'overview', label: 'نظرة عامة', href: '/dashboard/overview', icon: LayoutDashboard, end: true, mobile: true },
   { id: 'customers', label: 'العملاء', href: '/dashboard/customers', icon: Users, mobile: true },
+  { id: 'receipts', label: 'سندات القبض', href: '/dashboard/receipts', icon: Receipt, mobile: true },
   { id: 'orders', label: 'الطلبيات', href: '/dashboard/orders', icon: ClipboardList, mobile: false },
   { id: 'products', label: 'الكتالوج', href: '/products', icon: Package, mobile: true },
   { id: 'settings', label: 'الإعدادات', href: '/dashboard/settings', icon: Settings, mobile: false },
@@ -36,6 +36,7 @@ export function salesOsLabel(id: string): string | undefined {
 export function salesOsNavActive(pathname: string, href: string, end?: boolean): boolean {
   const base = href.split('?')[0]
   if (base === '/dashboard/customers') return pathname === base || pathname.startsWith(`${base}/`)
+  if (base === '/dashboard/receipts') return pathname === base || pathname.startsWith(`${base}/`)
   if (base === '/dashboard/orders') return pathname === base || pathname.startsWith(`${base}/`)
   if (base === '/products') {
     return pathname === base || pathname.startsWith(`${base}/`) || pathname === '/visit-order'

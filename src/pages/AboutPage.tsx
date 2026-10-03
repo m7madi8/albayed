@@ -10,7 +10,7 @@ export default function AboutPage() {
       <section className="hairline-b bg-surface-muted/60">
         <div className="container-x py-16 md:py-24">
           <Reveal className="max-w-2xl">
-            <p className="text-[13.5px] font-medium text-accent">عن الشركة</p>
+            <p className="text-[13.5px] font-medium text-accent-text">عن الشركة</p>
             <h1 className="display mt-4 text-[clamp(2.1rem,4.6vw,3.4rem)] text-foreground">{company.showroom}</h1>
             <p className="mt-6 text-[17px] leading-8 text-foreground-secondary/80">{company.description}</p>
           </Reveal>

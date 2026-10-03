@@ -10,10 +10,12 @@ export default function ProductGrid({
   products,
   onClearAll,
   resultsKey,
+  className = '',
 }: {
   products: Product[]
   onClearAll?: () => void
   resultsKey?: string
+  className?: string
 }) {
   const reduce = useReducedMotion()
   const [busy, setBusy] = useState(false)
@@ -21,22 +23,23 @@ export default function ProductGrid({
   useEffect(() => {
     if (!resultsKey) return
     setBusy(true)
-    const id = window.setTimeout(() => setBusy(false), 120)
+    const id = window.setTimeout(() => setBusy(false), 60)
     return () => window.clearTimeout(id)
   }, [resultsKey])
 
   if (busy && products.length > 0) {
-    return <ProductGridSkeleton count={Math.min(products.length, 8)} />
+    return <ProductGridSkeleton count={Math.min(products.length, 9)} />
   }
 
   if (products.length === 0) {
     const empty = (
       <EmptyState
+        variant="catalog"
         title="لا توجد منتجات مطابقة"
-        body="جرّب تعديل الفلاتر أو البحث بكلمات أخرى."
+        body="جرّب قسمًا آخر أو ابحث باسم المنتج أو رقم الصنف."
         action={
           onClearAll ? (
-            <button type="button" onClick={onClearAll} className="catalog-empty__link">
+            <button type="button" onClick={onClearAll} className="cp-empty__link">
               مسح كل الفلاتر
             </button>
           ) : undefined
@@ -54,7 +57,7 @@ export default function ProductGrid({
   }
 
   const grid = (
-    <div className="product-grid">
+    <div className={`cp-grid ${className}`.trim()}>
       {products.map((p) => (
         <ProductCard key={p.id} product={p} />
       ))}
@@ -64,7 +67,7 @@ export default function ProductGrid({
   if (reduce || !resultsKey) return grid
 
   return (
-    <motion.div key={resultsKey} className="catalog-results-motion" {...catalogResultsMotion}>
+    <motion.div key={resultsKey} className="min-w-0" {...catalogResultsMotion}>
       {grid}
     </motion.div>
   )

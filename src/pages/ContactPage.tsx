@@ -10,7 +10,7 @@ export default function ContactPage() {
       <section className="hairline-b bg-surface-muted/60">
         <div className="container-x py-16 md:py-24">
           <Reveal className="max-w-xl">
-            <p className="text-[13.5px] font-medium text-accent">تواصل معنا</p>
+            <p className="text-[13.5px] font-medium text-accent-text">تواصل معنا</p>
             <h1 className="display mt-4 text-[clamp(2.1rem,4.6vw,3.4rem)] text-foreground">نحن هنا لمساعدتك</h1>
             <p className="mt-6 text-[17px] leading-8 text-foreground-secondary/80">
               لأي استفسار عن منتج أو مشروع أو توفّر صنف معيّن، فريقنا جاهز للرد خلال ساعات العمل.

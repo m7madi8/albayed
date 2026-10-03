@@ -8,6 +8,7 @@ import {
   ClipboardList,
   FileText,
   Home,
+  Receipt,
   LayoutDashboard,
   ShoppingBag,
   UserPlus,
@@ -33,6 +34,7 @@ const ICONS: Record<NonNullable<DashboardNavItem['icon']>, LucideIcon> = {
   'file-text': FileText,
   wallet: Wallet,
   bell: Bell,
+  receipt: Receipt,
 }
 
 const CHILD_ICONS: Record<NonNullable<DashboardNavChild['icon']>, LucideIcon> = {

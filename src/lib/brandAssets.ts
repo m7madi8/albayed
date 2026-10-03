@@ -35,14 +35,17 @@ export interface HeroArtwork {
   fallbackWidth: number
 }
 
+/** Primary site hero — `/brand/hero-4k.jpg` (single background for home + sales overview). */
+export const SITE_HERO_ART: HeroArtwork = {
+  src: BRAND_HERO_IMAGE,
+  fallback: BRAND_HERO_IMAGE_FALLBACK,
+  width: BRAND_HERO_WIDTH,
+  height: BRAND_HERO_HEIGHT,
+  fallbackWidth: BRAND_HERO_FALLBACK_WIDTH,
+}
+
 export const HERO_ARTWORK: Record<HeroBackground, HeroArtwork> = {
-  default: {
-    src: BRAND_HERO_IMAGE,
-    fallback: BRAND_HERO_IMAGE_FALLBACK,
-    width: BRAND_HERO_WIDTH,
-    height: BRAND_HERO_HEIGHT,
-    fallbackWidth: BRAND_HERO_FALLBACK_WIDTH,
-  },
+  default: SITE_HERO_ART,
   pipes: {
     src: PIPES_HERO_IMAGE,
     fallback: PIPES_HERO_IMAGE_FALLBACK,

@@ -6,13 +6,16 @@ import { useTheme } from '../../context/ThemeContext'
 export default function Logo({
   compact = false,
   variant = compact ? 'compact' : 'default',
+  onDark = false,
 }: {
   compact?: boolean
   variant?: 'default' | 'compact' | 'header'
+  /** Light mark on photographic / graphite heroes */
+  onDark?: boolean
 }) {
   const { theme } = useTheme()
   const resolved = variant === 'compact' || compact ? 'compact' : variant
-  const src = theme === 'dark' ? BRAND_LOGO_ON_DARK : BRAND_LOGO_FULL
+  const src = onDark || theme === 'dark' ? BRAND_LOGO_ON_DARK : BRAND_LOGO_FULL
 
   const size =
     resolved === 'header'

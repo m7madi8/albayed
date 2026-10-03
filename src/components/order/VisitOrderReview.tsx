@@ -6,6 +6,7 @@ import { getProductById } from '../../lib/catalog'
 import { formatUnitPrice, lineTotal } from '../../lib/customerPricing'
 import { ORDER_UNIT_LABEL, lineKey } from '../../lib/orderUnits'
 import CatalogClientBar from './CatalogClientBar'
+import VisitOrderStepper from './VisitOrderStepper'
 import ProductStage from '../catalog/ProductStage'
 import QuantityInput from './QuantityInput'
 import { btn } from '../../lib/buttonStyles'
@@ -62,6 +63,7 @@ export default function VisitOrderReview({
 
   return (
     <div className="presentation-order">
+      {variant === 'catalog' ? <VisitOrderStepper /> : null}
       <header className="presentation-order__head">
         <div>
           <p className="presentation-order__kicker">عرض الزيارة</p>
@@ -131,7 +133,7 @@ export default function VisitOrderReview({
         ) : (
           <p className="order-panel-empty">
             أضِف المنتجات من{' '}
-            <Link to="/products" className="text-accent-dark underline-offset-2 hover:underline">
+            <Link to="/products" className="text-link underline-offset-2 hover:underline">
               الكتالوج
             </Link>
             .

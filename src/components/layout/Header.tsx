@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useScrollThreshold } from '../../lib/useScrollThreshold'
 import { Link, useLocation } from 'react-router-dom'
 import { ClipboardList, Menu, Search, Star } from 'lucide-react'
 import { useCatalogEngagement } from '../../context/CatalogEngagementContext'
@@ -8,7 +8,10 @@ import { buildOrderEntryPath } from '../../lib/orderEntry'
 import { isCatalogPath } from '../../lib/catalogPath'
 
 const HEADER_NAV = [
-  { href: '/products', label: 'الكتالوج', match: (p: string) => isCatalogPath(p) },
+  { href: '/products', label: 'الكتالوج', match: (p: string) => isCatalogPath(p) && p !== '/visit-order' },
+  { href: '/brands', label: 'العلامات', match: (p: string) => p.startsWith('/brands') },
+  { href: '/about', label: 'من نحن', match: (p: string) => p === '/about' },
+  { href: '/contact', label: 'تواصل', match: (p: string) => p === '/contact' },
   { href: '/dashboard/overview', label: 'نظام المبيعات', match: (p: string) => p.startsWith('/dashboard') },
 ] as const
 
@@ -26,21 +29,17 @@ export default function Header({
   const { favoriteIds } = useCatalogEngagement()
   const { pathname } = useLocation()
   const onCatalog = isCatalogPath(pathname)
+  const onHome = pathname === '/'
   const favCount = favoriteIds.length
-  const [scrolled, setScrolled] = useState(false)
-
-  useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 6)
-    onScroll()
-    window.addEventListener('scroll', onScroll, { passive: true })
-    return () => window.removeEventListener('scroll', onScroll)
-  }, [])
+  const scrolled = useScrollThreshold(6)
 
   return (
-    <header className={`app-header${scrolled ? ' app-header--scrolled' : ''}`}>
+    <header
+      className={`app-header${scrolled ? ' app-header--scrolled' : ''}${onHome && !scrolled ? ' app-header--home' : ''}`}
+    >
       <div className="app-header-container">
         <div className="app-header-brand">
-          <Logo variant="header" />
+          <Logo variant="header" onDark={onHome && !scrolled} />
         </div>
 
         <nav className="app-header-nav" aria-label="التنقل الرئيسي">

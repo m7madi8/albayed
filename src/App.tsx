@@ -8,10 +8,11 @@ import CategoryPage from './pages/CategoryPage'
 import VisitOrderPage from './pages/VisitOrderPage'
 import DashboardPage from './pages/DashboardPage'
 import CustomerProfilePage from './pages/CustomerProfilePage'
-import NotFound from './pages/NotFound'
+import ProductDetailPage from './pages/ProductDetailPage'
 import AboutPage from './pages/AboutPage'
 import ContactPage from './pages/ContactPage'
 import BrandsPage from './pages/BrandsPage'
+import NotFound from './pages/NotFound'
 
 export default function App() {
   return (
@@ -20,6 +21,7 @@ export default function App() {
         <Route index element={<Home />} />
         <Route path="products" element={<ProductsPage />} />
         <Route path="products/favorites" element={<FavoritesPage />} />
+        <Route path="products/:slug" element={<ProductDetailPage />} />
         <Route path="category/:slug" element={<CategoryPage />} />
         <Route path="visit-order" element={<VisitOrderPage />} />
         <Route path="about" element={<AboutPage />} />

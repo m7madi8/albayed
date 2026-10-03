@@ -113,7 +113,7 @@ export default function ProductPickerList({ onAdded }: { onAdded?: () => void })
         ))}
       </ul>
       {list.length === 0 && <p className="py-10 text-center text-[14px] text-foreground-muted">لا توجد نتائج.</p>}
-      <Link to="/products" className="mt-4 block text-center text-[14px] font-medium text-accent">
+      <Link to="/products" className="mt-4 block text-center text-[14px] font-medium text-accent-text">
         الكتالوج الكامل والفلاتر
       </Link>
     </div>

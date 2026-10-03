@@ -97,6 +97,8 @@ export interface Product {
   details: SpecRow[]
   keywords?: string[]
   relatedProductIds?: string[]
+  /** Optional PDF datasheet URL (public path or absolute) */
+  datasheetUrl?: string
 }
 
 export interface SiteStat {

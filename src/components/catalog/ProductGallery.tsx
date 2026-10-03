@@ -13,7 +13,7 @@ export default function ProductGallery({ art, name }: { art: ArtSpec; name: stri
 
   return (
     <div>
-      <div className="catalog-stage flex aspect-[4/3.4] items-center justify-center rounded-[var(--radius-card)] p-10 sm:p-14">
+      <div className="catalog-stage catalog-stage--ratio flex items-center justify-center rounded-[var(--radius-card)] p-10 sm:p-14">
         <ProductArt spec={art} view={view} alt={name} className="h-full w-full" />
       </div>
       <div className="mt-4 flex justify-center gap-2">

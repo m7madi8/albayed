@@ -28,6 +28,46 @@ export function allSpecificationRows(product: Product, category: Category): Spec
   return [...attrRows, ...extra]
 }
 
+export type SpecGroup = { title: string; rows: SpecRow[] }
+
+const PHYSICAL_KEYS = new Set(['diameter', 'size', 'thickness', 'material', 'length', 'finish', 'capacity'])
+const CONNECTION_KEYS = new Set(['connection'])
+const PRESSURE_KEYS = new Set(['pressure', 'usage'])
+const CERT_KEY_RE = /شهاد|معيار|cert|standard|iso/i
+
+function rowKeyForLabel(label: string, product: Product, category: Category): string | undefined {
+  for (const [key] of Object.entries(product.attributes)) {
+    const def = category.filters.find((f) => f.key === key)
+    if ((def?.label ?? key) === label) return key
+  }
+  return undefined
+}
+
+/** Grouped datasheet sections for PDP */
+export function groupedSpecificationRows(product: Product, category: Category): SpecGroup[] {
+  const all = allSpecificationRows(product, category)
+  const buckets: Record<string, SpecRow[]> = {
+    'الخصائص الفيزيائية': [],
+    'التوصيل والربط': [],
+    'الضغط والاستخدام': [],
+    'الشهادات والمعايير': [],
+    أخرى: [],
+  }
+
+  for (const row of all) {
+    const key = rowKeyForLabel(row.label, product, category)
+    if (key && PHYSICAL_KEYS.has(key)) buckets['الخصائص الفيزيائية'].push(row)
+    else if (key && CONNECTION_KEYS.has(key)) buckets['التوصيل والربط'].push(row)
+    else if (key && PRESSURE_KEYS.has(key)) buckets['الضغط والاستخدام'].push(row)
+    else if (CERT_KEY_RE.test(row.label)) buckets['الشهادات والمعايير'].push(row)
+    else buckets['أخرى'].push(row)
+  }
+
+  return Object.entries(buckets)
+    .filter(([, rows]) => rows.length > 0)
+    .map(([title, rows]) => ({ title, rows }))
+}
+
 /** بيانات تُعرض بجانب وضع المخطط */
 export function blueprintSpecificationRows(product: Product, category: Category): SpecRow[] {
   const keys = ['diameter', 'size', 'thickness', 'material', 'connection', 'length', 'usage']

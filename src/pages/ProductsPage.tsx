@@ -2,31 +2,39 @@ import { useCallback, useMemo } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import {
   catalogBasePool,
-  catalogFacetDefs,
   categoryCatalogPath,
   resolveCategoryScope,
 } from '../lib/catalogFilters'
-import CatalogHeader, { CatalogCategoryTabs, catalogTitleForCategoryId } from '../components/catalog/CatalogHeader'
+import { catalogTitleForCategoryId } from '../components/catalog/CatalogHeader'
+import CatalogIntro from '../components/catalog/CatalogIntro'
+import CatalogCategoryRail from '../components/catalog/CatalogCategoryRail'
+import CountryFilter from '../components/catalog/CountryFilter'
 import { useCatalogQuery } from '../lib/useCatalogQuery'
 import ProductGrid from '../components/catalog/ProductGrid'
-import ListToolbar from '../components/catalog/ListToolbar'
-import CountryFilter from '../components/catalog/CountryFilter'
+import CatalogResultsBar from '../components/catalog/CatalogResultsBar'
 import CatalogClientBar from '../components/order/CatalogClientBar'
 import { useVisitOrder } from '../context/VisitOrderContext'
-import { useCatalogSearch } from '../context/SearchOpenContext'
-import { CATALOG_COUNTRY_FILTER_KEY, LEGACY_CATALOG_FILTER_KEYS } from '../lib/catalogCountry'
+import { readRepModeActive } from '../lib/catalogRepMode'
+import {
+  catalogCountryFilterDef,
+  CATALOG_COUNTRY_FILTER_KEY,
+  LEGACY_CATALOG_FILTER_KEYS,
+} from '../lib/catalogCountry'
+import type { FilterDef } from '../data/types'
+
+/** Country/origin chips only — no sidebar facet rail. */
+const CATALOG_LIST_DEFS: FilterDef[] = [catalogCountryFilterDef]
 
 export default function ProductsPage() {
   const [sp, setSp] = useSearchParams()
-  const { lineCount } = useVisitOrder()
-  const { openSearch } = useCatalogSearch()
+  const { lineCount, hasClient } = useVisitOrder()
+  const showRepBar = readRepModeActive() || hasClient || lineCount > 0
 
   const scope = resolveCategoryScope(sp)
   const pool = useMemo(() => catalogBasePool(sp), [sp.toString()])
-  const defs = useMemo(() => catalogFacetDefs(), [])
 
   const { facets, results, state, toggle, clearAll, setSort, sort, q, clearQuery, active, total } =
-    useCatalogQuery(pool, defs)
+    useCatalogQuery(pool, CATALOG_LIST_DEFS)
 
   const countryFacet = facets[0]
   const countrySelected = state[CATALOG_COUNTRY_FILTER_KEY] ?? []
@@ -78,45 +86,47 @@ export default function ProductsPage() {
   }, [clearAll, clearCountryFilter])
 
   return (
-    <div className={`catalog-page${lineCount > 0 ? ' catalog-page--order-bar' : ''}`}>
-      <section className="catalog-shell catalog-page-body">
-        <CatalogHeader
+    <div className={`catalog-pro catalog-page${lineCount > 0 ? ' catalog-page--order-bar' : ''}`}>
+      <div className="cp-shell">
+        <CatalogIntro
           title={title}
           intro={intro}
           count={results.length}
+          totalPool={pool.length}
           query={q || undefined}
           onClearQuery={clearQuery}
-          onOpenSearch={openSearch}
         />
 
-        <CatalogCategoryTabs currentSlug={scope.slug} buildHref={buildCategoryHref} />
+        <CatalogCategoryRail currentSlug={scope.slug} buildHref={buildCategoryHref} />
 
-        <CountryFilter
-          facet={countryFacet}
-          selected={countrySelected}
-          onToggle={onToggleCountry}
-          onClearAll={clearCountryFilter}
-        />
+        {showRepBar ? (
+          <div className="cp-client">
+            <CatalogClientBar />
+          </div>
+        ) : null}
 
-        <div className="catalog-client-strip mt-5">
-          <CatalogClientBar />
-        </div>
+        <div className="cp-workspace cp-workspace--full">
+          <div className="cp-main">
+            <CountryFilter
+              facet={countryFacet}
+              selected={countrySelected}
+              onToggle={onToggleCountry}
+              onClearAll={clearCountryFilter}
+            />
 
-        <div className="catalog-layout mt-5 lg:mt-6">
-          <div className="catalog-main min-w-0">
-            <ListToolbar
+            <CatalogResultsBar
               total={total}
               active={active}
               onRemove={onRemoveChip}
               sort={sort}
               onSort={setSort}
+              onClearAll={clearFacetsAndSearch}
             />
-
 
             <ProductGrid products={results} onClearAll={clearFacetsAndSearch} resultsKey={resultsKey} />
           </div>
         </div>
-      </section>
+      </div>
     </div>
   )
 }

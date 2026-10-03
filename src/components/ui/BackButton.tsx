@@ -32,7 +32,7 @@ export default function BackButton({
       type="button"
       onClick={goBack}
       aria-label="رجوع"
-      className={btn('ghost', 'min-h-11 gap-1.5 rounded-[12px] px-3 text-[15px] font-medium active:text-accent')}
+      className={btn('ghost', 'min-h-11 gap-1.5 rounded-[12px] px-3 text-[15px] font-medium active:text-accent-text')}
     >
       <ChevronRight size={20} strokeWidth={2} aria-hidden />
       رجوع

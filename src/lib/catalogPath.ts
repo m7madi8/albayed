@@ -1,8 +1,8 @@
-/** Catalog list, favorites, and legacy category paths share catalog chrome. */
+/** Catalog list, favorites, product detail, and legacy category paths share catalog chrome. */
 export function isCatalogPath(pathname: string): boolean {
   return (
     pathname === '/products' ||
-    pathname === '/products/favorites' ||
+    pathname.startsWith('/products/') ||
     pathname.startsWith('/category/') ||
     pathname === '/visit-order'
   )

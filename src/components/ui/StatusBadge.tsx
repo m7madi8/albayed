@@ -7,5 +7,10 @@ export default function StatusBadge({
   tone: StatusTone
   children: string
 }) {
-  return <span className={statusClass(tone)}>{children}</span>
+  return (
+    <span className={statusClass(tone)}>
+      <span className="status-dot" aria-hidden />
+      {children}
+    </span>
+  )
 }

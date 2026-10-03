@@ -1,0 +1,102 @@
+/*
+  Shared hero photograph: /brand/hero-4k.jpg (+ hero-2k.jpg in srcset).
+  One image, responsive crop via object-position only.
+*/
+
+.site-hero {
+  --site-hero-pos-x: 50%;
+  --site-hero-pos-y: 36%;
+}
+
+@media (min-width: 480px) {
+  .site-hero {
+    --site-hero-pos-x: 52%;
+    --site-hero-pos-y: 38%;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1023px) {
+  .site-hero {
+    --site-hero-pos-x: 58%;
+    --site-hero-pos-y: 36%;
+  }
+}
+
+@media (min-width: 1024px) and (max-width: 1279px) {
+  .site-hero {
+    --site-hero-pos-x: 62%;
+    --site-hero-pos-y: 34%;
+  }
+}
+
+@media (min-width: 1280px) {
+  .site-hero {
+    --site-hero-pos-x: 60%;
+    --site-hero-pos-y: 38%;
+  }
+}
+
+.site-hero__bg-layer {
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  overflow: hidden;
+}
+
+.site-hero__bg,
+.rep-hero .site-hero__bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: var(--site-hero-pos-x) var(--site-hero-pos-y);
+}
+
+.hero-vault.site-hero .site-hero__bg {
+  animation: site-hero-reveal 0.45s ease-out both;
+}
+
+@keyframes site-hero-reveal {
+  from {
+    opacity: 0.92;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Home scrim — light top/bottom only (no left-side vignette) */
+.hero-vault.site-hero .site-hero__scrim {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, #000000 42%, transparent) 0%,
+    transparent 22%,
+    transparent 55%,
+    color-mix(in srgb, #000000 48%, transparent) 100%
+  );
+}
+
+@media (min-width: 768px) {
+  .hero-vault.site-hero .site-hero__scrim {
+    background: linear-gradient(
+      180deg,
+      color-mix(in srgb, #000000 36%, transparent) 0%,
+      transparent 20%,
+      transparent 58%,
+      color-mix(in srgb, #000000 42%, transparent) 100%
+    );
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-vault.site-hero .site-hero__bg {
+    animation: none;
+  }
+}

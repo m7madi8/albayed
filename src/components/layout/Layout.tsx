@@ -11,6 +11,7 @@ import { useScrollRestoration } from '../../lib/useScrollRestoration'
 import { SearchOpenProvider } from '../../context/SearchOpenContext'
 import { isCatalogPath } from '../../lib/catalogPath'
 import Footer from './Footer'
+import CatalogMobileNav from './CatalogMobileNav'
 
 export default function Layout() {
   const [searchOpen, setSearchOpen] = useState(false)
@@ -37,7 +38,7 @@ export default function Layout() {
 
   const pageInner = (
     <>
-      {!isHome && (
+      {!isHome && pathname !== '/products' && (
         <div className={`${isCatalogRoute ? 'catalog-shell' : 'container-x'} pt-2 lg:pt-3`}>
           <BackButton to={isCatalogRoute ? (pathname.startsWith('/products/') ? '/products' : '/') : undefined} />
         </div>
@@ -48,10 +49,18 @@ export default function Layout() {
 
   return (
     <SearchOpenProvider open={openSearch}>
+    <a href="#main-content" className="skip-link">
+      تخطي إلى المحتوى
+    </a>
     <div className={`app-canvas min-h-dvh${isCatalogRoute ? ' app-canvas--catalog' : ''}`}>
-      <div className={`app-frame flex min-h-dvh flex-col${isCatalogRoute ? ' app-frame--catalog' : ''}`}>
+      <div
+        className={`app-frame flex min-h-dvh flex-col${isCatalogRoute ? ' app-frame--catalog' : ''}${isHome ? ' app-frame--home' : ''}`}
+      >
         <Header onSearch={() => setSearchOpen(true)} onMenu={() => setMenuOpen(true)} />
-        <main className="main-flow flex-1 pb-[env(safe-area-inset-bottom)]">
+        <main
+          id="main-content"
+          className={`main-flow flex-1${isCatalogRoute ? ' main-flow--catalog-mobile' : ''} pb-[env(safe-area-inset-bottom)]`}
+        >
           {isStaticPageShell ? (
             <div className="page-shell page-shell--static">{pageInner}</div>
           ) : (
@@ -64,6 +73,9 @@ export default function Layout() {
           <VisitOrderBar />
         </main>
         {!isCatalogRoute && <Footer />}
+        {isCatalogRoute ? (
+          <CatalogMobileNav onSearch={() => setSearchOpen(true)} onMenu={() => setMenuOpen(true)} />
+        ) : null}
         <SearchOverlay open={searchOpen} onClose={() => setSearchOpen(false)} />
         <SalesRepSidebar open={menuOpen} onClose={() => setMenuOpen(false)} />
       </div>

@@ -34,8 +34,10 @@ export default function VisitOrderBar() {
     </div>
   )
 
-  const barClass =
-    'visit-order-bar sticky bottom-0 z-30 border-t border-border bg-surface px-4 py-3 pb-[max(12px,env(safe-area-inset-bottom))]'
+  const barClass = [
+    'visit-order-bar z-30 border-t border-border bg-surface px-4 py-3',
+    isCatalogRoute ? 'visit-order-bar--catalog-dock' : 'sticky bottom-0 pb-[max(12px,env(safe-area-inset-bottom))]',
+  ].join(' ')
 
   if (reduce) {
     return <div className={barClass}>{inner}</div>

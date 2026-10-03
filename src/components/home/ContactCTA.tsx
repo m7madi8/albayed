@@ -1,21 +1,53 @@
-import { ButtonLink } from '../ui/Button'
-import Reveal from '../ui/Reveal'
+import { Link } from 'react-router-dom'
+import { ArrowLeft } from 'lucide-react'
+import { BRAND_LOGO_HERO, HERO_ARTWORK } from '../../lib/brandAssets'
+import { publicMediaUrl } from '../../lib/publicMediaUrl'
+import { btn } from '../../lib/buttonStyles'
+
+const macro = HERO_ARTWORK.brass
 
 export default function ContactCTA() {
   return (
-    <section className="hairline-t bg-surface py-20 md:py-28">
-      <div className="container-x">
-        <Reveal className="flex flex-col items-start justify-between gap-8 md:flex-row md:items-end">
-          <div className="max-w-lg">
-            <h2 className="display text-[clamp(2rem,4vw,3rem)] text-foreground">تبحث عن منتج محدد؟</h2>
-            <p className="mt-4 text-[16.5px] leading-8 text-foreground-muted">
-              فريقنا جاهز لمساعدتك في إيجاد المنتج المناسب من بين آلاف الأصناف، أو توفير ما تحتاجه لمشروعك خصيصًا.
-            </p>
+    <section className="aisle-close" aria-labelledby="home-close-heading">
+      <div className="aisle-close__bg" aria-hidden>
+        <img
+          src={publicMediaUrl(macro.fallback)}
+          alt=""
+          width={macro.fallbackWidth}
+          height={Math.round((macro.fallbackWidth * macro.height) / macro.width)}
+          loading="lazy"
+          decoding="async"
+        />
+      </div>
+
+      <div className="container-x aisle-close__inner">
+        <div>
+          <h2 id="home-close-heading" className="aisle-close__title">
+            خطوتك التالية
+          </h2>
+          <p className="aisle-close__text">
+            فريقنا جاهز لمساعدتك في إيجاد المنتج المناسب من بين آلاف الأصناف.
+          </p>
+          <div className="aisle-close__actions">
+            <Link to="/contact" className={btn('primary', 'shrink-0')}>
+              تواصل معنا
+            </Link>
+            <Link to="/visit-order" className="aisle-textlink aisle-textlink--on-dark">
+              اطلب زيارة
+              <ArrowLeft size={16} strokeWidth={1.75} aria-hidden />
+            </Link>
           </div>
-          <ButtonLink to="/contact" variant="light" className="shrink-0">
-            تواصل معنا
-          </ButtonLink>
-        </Reveal>
+        </div>
+
+        <img
+          src={BRAND_LOGO_HERO}
+          alt=""
+          width={360}
+          height={335}
+          className="aisle-close__logo"
+          decoding="async"
+          loading="lazy"
+        />
       </div>
     </section>
   )

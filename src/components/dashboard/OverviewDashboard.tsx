@@ -1,102 +1,84 @@
 import { Link } from 'react-router-dom'
-import { Package, Plus, Search, Users } from 'lucide-react'
+import { Users } from 'lucide-react'
+import SalesWorkspaceHero from '../sales-os/SalesWorkspaceHero'
 import { loadAllClients } from '../../lib/customClients'
+import { formatSubmittedOrderWhen, loadSubmittedOrders } from '../../lib/submittedOrders'
 import { useVisitOrder } from '../../context/VisitOrderContext'
 import { btn } from '../../lib/buttonStyles'
-import { useCatalogSearch } from '../../context/SearchOpenContext'
 
 export default function OverviewDashboard() {
-  const { clientLabel, lineCount, unitCount, hasClient } = useVisitOrder()
+  const { clientLabel, lineCount, unitCount } = useVisitOrder()
   const clients = loadAllClients()
-  const { openSearch } = useCatalogSearch()
+  const orders = loadSubmittedOrders()
+  const pendingOrders = orders.filter((o) => o.status === 'pending')
 
   return (
-    <div className="sales-os-section">
-      <header className="sales-os-page-head">
-        <div>
-          <p className="text-[12px] font-medium tracking-wide text-foreground-muted">نظرة عامة</p>
-          <h1 className="display mt-1 text-[1.5rem] text-foreground lg:text-[1.75rem]">مساحة العمل</h1>
-          <p className="mt-2 max-w-xl text-[14px] leading-7 text-foreground-muted">
-            ما يحتاج انتباهك الآن — بدون أرقام وهمية.
-          </p>
-        </div>
-        <div className="sales-os-quick-actions">
-          <Link to="/products" className={btn('primary', 'sales-os-action-btn gap-2')}>
-            <Package size={18} aria-hidden />
-            فتح الكتالوج
-          </Link>
-          <Link to="/dashboard/customers?new=1" className={btn('secondary', 'sales-os-action-btn gap-2')}>
-            <Plus size={18} aria-hidden />
-            عميل جديد
-          </Link>
-          <button type="button" onClick={openSearch} className={btn('secondary', 'sales-os-action-btn gap-2')}>
-            <Search size={18} aria-hidden />
-            بحث
-          </button>
-        </div>
-      </header>
+    <div className="sales-os-overview">
+      <SalesWorkspaceHero />
 
-      <section className="sales-os-focus mt-8" aria-labelledby="focus-heading">
-        <h2 id="focus-heading" className="text-[13px] font-medium text-foreground-muted">الآن</h2>
-        <div className="mt-3 grid gap-3 sm:grid-cols-2">
-          <div className="sales-os-panel">
-            <p className="text-[12px] font-medium text-foreground-muted">طلبية الزيارة</p>
-            {lineCount > 0 ? (
-              <>
-                <p className="mt-2 text-[16px] font-medium text-foreground">
-                  {lineCount} صنف · {unitCount} وحدة
-                </p>
-                <p className="mt-1 truncate text-[14px] text-foreground-muted">{clientLabel ?? 'حدّد العميل في الطلبية'}</p>
-                <Link to="/visit-order" className={btn('primary', 'mt-4 h-11 w-full rounded-[10px] text-[14px]')}>
-                  مراجعة الطلبية
+      <div className="sales-os-overview__body sales-os-section">
+        <section className="rep-queue" aria-labelledby="queue-heading">
+          <div className="rep-queue__head">
+            <h2 id="queue-heading" className="rep-queue__title">قائمة المتابعة</h2>
+            <Link to="/dashboard/orders" className="rep-queue__link">كل الطلبيات</Link>
+          </div>
+
+          <ul className="ios-list">
+            {lineCount > 0 && (
+              <li>
+                <Link to="/visit-order" className="ios-list-row block">
+                  <span className="text-[15px] font-medium text-foreground">طلبية الزيارة الحالية</span>
+                  <span className="mt-0.5 block text-[13px] text-foreground-muted">
+                    {lineCount} صنف · {unitCount} وحدة
+                    {clientLabel ? ` · ${clientLabel}` : ''}
+                  </span>
                 </Link>
-              </>
-            ) : (
-              <>
-                <p className="mt-2 text-[15px] text-foreground">لا توجد طلبية مفتوحة</p>
-                <p className="mt-1 text-[14px] text-foreground-muted">حدّد العميل من الكتالوج ثم أضف الأصناف.</p>
-                <Link to="/products" className={btn('secondary', 'mt-4 h-11 w-full rounded-[10px] text-[14px]')}>
-                  فتح الكتالوج
-                </Link>
-              </>
+              </li>
             )}
-          </div>
-
-          <div className="sales-os-panel">
-            <p className="text-[12px] font-medium text-foreground-muted">العملاء</p>
-            <p className="mt-2 text-[16px] font-medium text-foreground">{clients.length} عميل مسجّل</p>
-            <p className="mt-1 text-[14px] text-foreground-muted">
-              {hasClient ? `الجلسة الحالية: ${clientLabel}` : 'لم يُحدَّد عميل للطلبية بعد.'}
-            </p>
-            <Link
-              to="/dashboard/customers"
-              className={btn('secondary', 'mt-4 h-11 w-full rounded-[10px] text-[14px]')}
-            >
-              <Users size={16} className="me-1" aria-hidden />
-              فتح قائمة العملاء
-            </Link>
-          </div>
-        </div>
-      </section>
-
-      {clients.length > 0 && (
-        <section className="mt-10" aria-labelledby="clients-recent">
-          <div className="flex items-end justify-between gap-3">
-            <h2 id="clients-recent" className="text-[13px] font-medium text-foreground-muted">عملاء للمتابعة</h2>
-            <Link to="/dashboard/customers" className="text-[13px] font-medium text-accent">كل العملاء</Link>
-          </div>
-          <ul className="ios-list mt-3">
-            {clients.slice(0, 5).map((c) => (
-              <li key={c.id}>
-                <Link to={`/dashboard/customers/${c.id}`} className="ios-list-row block">
-                  <span className="text-[15px] font-medium text-foreground">{c.name}</span>
-                  <span className="mt-0.5 block text-[13px] text-foreground-muted">{c.city}</span>
+            {pendingOrders.slice(0, 3).map((o) => (
+              <li key={o.id}>
+                <Link to="/dashboard/orders" className="ios-list-row block">
+                  <span className="text-[15px] font-medium text-foreground">طلبية بانتظار الاعتماد</span>
+                  <span className="mt-0.5 block text-[13px] text-foreground-muted">
+                    {o.clientName} · {formatSubmittedOrderWhen(o.createdAt)}
+                  </span>
                 </Link>
               </li>
             ))}
+            {lineCount === 0 && pendingOrders.length === 0 && (
+              <li className="ios-list-row text-[14px] text-foreground-muted">
+                لا توجد مهام عاجلة — افتح الكتالوج أو راجع العملاء.
+              </li>
+            )}
           </ul>
         </section>
-      )}
+
+        {clients.length > 0 && (
+          <section className="mt-10" aria-labelledby="clients-recent">
+            <div className="rep-queue__head">
+              <h2 id="clients-recent" className="rep-queue__title">عملاء للمتابعة</h2>
+              <Link to="/dashboard/customers" className="rep-queue__link">كل العملاء</Link>
+            </div>
+            <ul className="ios-list">
+              {clients.slice(0, 6).map((c) => (
+                <li key={c.id}>
+                  <Link to={`/dashboard/customers/${c.id}`} className="ios-list-row block">
+                    <span className="text-[15px] font-medium text-foreground">{c.name}</span>
+                    <span className="mt-0.5 block text-[13px] text-foreground-muted">{c.city}</span>
+                  </Link>
+                </li>
+              ))}
+            </ul>
+            <Link
+              to="/dashboard/customers?new=1"
+              className={btn('secondary', 'mt-4 h-11 w-full gap-2 sm:w-auto')}
+            >
+              <Users size={16} aria-hidden />
+              عميل جديد
+            </Link>
+          </section>
+        )}
+      </div>
     </div>
   )
 }

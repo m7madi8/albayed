@@ -7,6 +7,9 @@ export const type = {
   label: 'type-label',
   caption: 'type-caption',
   meta: 'type-meta',
+  data: 'type-data',
+  sku: 'type-sku',
+  link: 'text-link',
   button: 'type-button',
   /** Page/hero titles (700) */
   displayEditorial: 'display',

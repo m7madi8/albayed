@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion'
 import { Building2, ClipboardList, Search, X } from 'lucide-react'
@@ -37,6 +37,32 @@ export default function UniversalSearchOverlay({ open, onClose }: { open: boolea
 
   const result = universalSearch(q, 6)
   const hasQuery = q.trim().length > 0
+  const [activeIndex, setActiveIndex] = useState(0)
+  const listRef = useRef<HTMLDivElement>(null)
+
+  const navigablePaths = useMemo(() => {
+    if (!hasQuery) return [] as string[]
+    const paths: string[] = []
+    if (result.orderMatch) paths.push('/visit-order')
+    for (const c of result.customers) paths.push(`/dashboard/customers/${c.id}`)
+    for (const p of result.products) paths.push(`/products?q=${encodeURIComponent(p.id)}`)
+    if (result.productTotal > result.products.length) {
+      paths.push(`/products?q=${encodeURIComponent(q.trim())}`)
+    }
+    return paths
+  }, [hasQuery, q, result.customers, result.orderMatch, result.productTotal, result.products])
+
+  useEffect(() => {
+    setActiveIndex(0)
+  }, [q, navigablePaths.length])
+
+  useEffect(() => {
+    if (!open) return
+    listRef.current
+      ?.querySelector<HTMLElement>(`[data-search-index="${activeIndex}"]`)
+      ?.scrollIntoView({ block: 'nearest' })
+  }, [activeIndex, open])
+
   const hasAny =
     hasQuery &&
     (result.products.length > 0 || result.customers.length > 0 || result.orderMatch || result.productTotal > 0)
@@ -44,6 +70,11 @@ export default function UniversalSearchOverlay({ open, onClose }: { open: boolea
   const go = (path: string) => {
     onClose()
     navigate(path)
+  }
+
+  const rowActive = (path: string) => {
+    const i = navigablePaths.indexOf(path)
+    return i >= 0 && i === activeIndex ? ' search-result-row--active' : ''
   }
 
   const panelMotion = reduce ? {} : searchOverlayMotion
@@ -74,8 +105,15 @@ export default function UniversalSearchOverlay({ open, onClose }: { open: boolea
                 value={q}
                 onChange={(e) => setQ(e.target.value)}
                 onKeyDown={(e) => {
-                  if (e.key === 'Enter' && hasQuery) {
-                    if (result.products[0]) go(`/products?q=${encodeURIComponent(result.products[0].id)}`)
+                  if (e.key === 'ArrowDown' && navigablePaths.length > 0) {
+                    e.preventDefault()
+                    setActiveIndex((i) => Math.min(i + 1, navigablePaths.length - 1))
+                  } else if (e.key === 'ArrowUp' && navigablePaths.length > 0) {
+                    e.preventDefault()
+                    setActiveIndex((i) => Math.max(i - 1, 0))
+                  } else if (e.key === 'Enter' && hasQuery) {
+                    if (navigablePaths[activeIndex]) go(navigablePaths[activeIndex])
+                    else if (result.products[0]) go(`/products?q=${encodeURIComponent(result.products[0].id)}`)
                     else if (result.customers[0]) go(`/dashboard/customers/${result.customers[0].id}`)
                     else go(`/products?q=${encodeURIComponent(q.trim())}`)
                   }
@@ -90,6 +128,7 @@ export default function UniversalSearchOverlay({ open, onClose }: { open: boolea
           </div>
 
           <motion.div
+            ref={listRef}
             className="container-x mx-auto w-full max-w-3xl flex-1 overflow-y-auto py-6"
             key={hasQuery ? 'results' : 'popular'}
             {...bodyMotion}
@@ -121,25 +160,29 @@ export default function UniversalSearchOverlay({ open, onClose }: { open: boolea
                 <h2 className="mb-3 text-[12px] font-medium tracking-wide text-foreground-muted">طلبية نشطة</h2>
                 <button
                   type="button"
+                  data-search-index={navigablePaths.indexOf('/visit-order')}
                   onClick={() => go('/visit-order')}
-                  className="ios-tile flex w-full items-center gap-3 px-4 py-4 text-right"
+                  className={`ios-tile flex w-full items-center gap-3 px-4 py-4 text-right${rowActive('/visit-order')}`}
                 >
-                  <ClipboardList size={20} className="text-accent" aria-hidden />
+                  <ClipboardList size={20} className="text-link" aria-hidden />
                   <span className="text-[15px] font-medium text-foreground">متابعة طلبية الزيارة الحالية</span>
                 </button>
               </section>
             )}
 
-            {result.customers.length > 0 && (
+            {hasQuery && result.customers.length > 0 && (
               <section className="mb-8">
                 <h2 className="mb-3 text-[12px] font-medium tracking-wide text-foreground-muted">عملاء</h2>
                 <ul className="ios-list">
-                  {result.customers.map((c) => (
+                  {result.customers.map((c) => {
+                    const path = `/dashboard/customers/${c.id}`
+                    return (
                     <li key={c.id}>
                       <button
                         type="button"
-                        onClick={() => go(`/dashboard/customers/${c.id}`)}
-                        className="ios-list-row flex w-full items-center gap-3 text-right"
+                        data-search-index={navigablePaths.indexOf(path)}
+                        onClick={() => go(path)}
+                        className={`ios-list-row flex w-full items-center gap-3 text-right${rowActive(path)}`}
                       >
                         <Building2 size={18} className="shrink-0 text-foreground-muted" aria-hidden />
                         <span className="min-w-0 flex-1">
@@ -152,21 +195,25 @@ export default function UniversalSearchOverlay({ open, onClose }: { open: boolea
                         <span className="text-[13px] text-foreground-muted" dir="ltr">{c.phone}</span>
                       </button>
                     </li>
-                  ))}
+                    )
+                  })}
                 </ul>
               </section>
             )}
 
-            {result.products.length > 0 && (
+            {hasQuery && result.products.length > 0 && (
               <section>
                 <h2 className="mb-3 text-[12px] font-medium tracking-wide text-foreground-muted">منتجات</h2>
                 <ul className="ios-list">
-                  {result.products.map((p) => (
+                  {result.products.map((p) => {
+                    const path = `/products?q=${encodeURIComponent(p.id)}`
+                    return (
                     <li key={p.id}>
                       <button
                         type="button"
-                        onClick={() => go(`/products?q=${encodeURIComponent(p.id)}`)}
-                        className="ios-list-row flex w-full items-center gap-3 text-right"
+                        data-search-index={navigablePaths.indexOf(path)}
+                        onClick={() => go(path)}
+                        className={`ios-list-row flex w-full items-center gap-3 text-right${rowActive(path)}`}
                       >
                         <span className="catalog-stage flex size-14 shrink-0 items-center justify-center rounded-[8px]">
                           <ProductArt spec={p.art} shadow={false} className="size-10" />
@@ -180,13 +227,15 @@ export default function UniversalSearchOverlay({ open, onClose }: { open: boolea
                         <span className="text-[12px] text-foreground-muted" dir="ltr">{p.id}</span>
                       </button>
                     </li>
-                  ))}
+                    )
+                  })}
                 </ul>
                 {result.productTotal > result.products.length && (
                   <button
                     type="button"
+                    data-search-index={navigablePaths.indexOf(`/products?q=${encodeURIComponent(q.trim())}`)}
                     onClick={() => go(`/products?q=${encodeURIComponent(q.trim())}`)}
-                    className="mt-4 text-[14px] font-medium text-accent"
+                    className={`mt-4 text-[14px] font-medium text-link${rowActive(`/products?q=${encodeURIComponent(q.trim())}`)}`}
                   >
                     عرض كل المنتجات ({result.productTotal})
                   </button>

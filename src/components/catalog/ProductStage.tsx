@@ -37,6 +37,8 @@ export default function ProductStage({
           src={photoSrc}
           alt=""
           className="catalog-stage-frame__photo"
+          width={320}
+          height={240}
           loading={density === 'card' ? 'lazy' : 'eager'}
           decoding="async"
           onError={() => setPhotoFailed(true)}

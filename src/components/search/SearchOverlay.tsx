@@ -176,7 +176,7 @@ export default function SearchOverlay({ open, onClose }: { open: boolean; onClos
                   <button
                     type="button"
                     onClick={submitFull}
-                    className="motion-link ui-press self-start text-[14.5px] font-medium text-accent underline-offset-4 hover:underline"
+                    className="motion-link ui-press self-start text-[14.5px] text-link font-medium underline-offset-4 hover:underline"
                   >
                     عرض كل النتائج ({result.total})
                   </button>

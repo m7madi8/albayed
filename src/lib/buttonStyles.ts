@@ -5,7 +5,7 @@ const base =
 
 const variants: Record<ButtonVariant, string> = {
   primary:
-    'border border-[var(--btn-border-primary)] bg-accent text-accent-foreground hover:border-[var(--btn-border-on-accent)] hover:bg-accent-hover active:bg-accent-hover',
+    'border border-[var(--btn-border-primary)] bg-accent text-accent-foreground hover:border-[var(--btn-border-on-accent)] hover:bg-accent-strong active:bg-accent-strong',
   secondary:
     'border border-[var(--btn-border-soft)] bg-surface text-foreground hover:border-[var(--btn-border-hover)] hover:bg-surface-muted active:bg-surface-muted',
   light:
@@ -15,3 +15,7 @@ const variants: Record<ButtonVariant, string> = {
 }
 
 export const btn = (variant: ButtonVariant = 'primary', extra = '') => `${base} ${variants[variant]} ${extra}`
+
+/** Same as btn with loading spinner via aria-busy + ds-btn--loading */
+export const btnWithLoading = (variant: ButtonVariant = 'primary', extra = '') =>
+  `${base} ${variants[variant]} ${extra}`

@@ -57,5 +57,20 @@ export const vizCrossfadeMotion = {
 export const modalPanelMotion = {
   initial: { opacity: 0, scale: 0.985 },
   animate: { opacity: 1, scale: 1 },
+  exit: { opacity: 0, scale: 0.98 },
   transition: { duration: MOTION_DURATION.base, ease: EASE_OUT },
+}
+
+/** Apply reduced motion: zero duration / no transform */
+export function motionProps<T extends { transition?: { duration?: number }; initial?: object; animate?: object }>(
+  preset: T,
+  reduced: boolean | null,
+): T {
+  if (!reduced) return preset
+  return {
+    ...preset,
+    initial: { opacity: 1, ...(preset.initial as object) },
+    animate: { opacity: 1, ...(preset.animate as object) },
+    transition: { duration: 0 },
+  } as T
 }

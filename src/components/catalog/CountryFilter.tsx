@@ -1,5 +1,5 @@
 import type { Facet } from '../../lib/filters'
-import { filterChipClass } from '../../lib/filterStyles'
+
 export default function CountryFilter({
   facet,
   selected,
@@ -16,37 +16,35 @@ export default function CountryFilter({
   const activeCount = selected.length
 
   return (
-    <section className="catalog-country-filter" aria-label="فلترة حسب البلد">
-      <div className="catalog-country-filter-head">
-        <p className="type-caption font-medium text-foreground-muted">البلد</p>
+    <section className="cp-origin" aria-label="فلترة حسب البلد">
+      <div className="cp-origin__head">
+        <p className="cp-origin__label">بلد المنشأ</p>
         {activeCount > 0 && (
-          <button
-            type="button"
-            onClick={onClearAll}
-            className="type-caption font-medium text-accent underline-offset-4 hover:underline"
-          >
+          <button type="button" onClick={onClearAll} className="cp-empty__link">
             مسح ({activeCount})
           </button>
         )}
       </div>
-      <div className="catalog-country-chips" role="group" aria-label="اختر البلد">
-        {facet.options.map((opt) => {
-          const active = selected.includes(opt.value)
-          const disabled = opt.count === 0 && !active
-          return (
-            <button
-              key={opt.value}
-              type="button"
-              disabled={disabled}
-              onClick={() => onToggle(opt.value)}
-              className={`${filterChipClass(active, disabled)} catalog-country-chip`}
-              aria-pressed={active}
-            >
-              <span>{opt.value}</span>
-              <span className="catalog-country-chip-count" aria-hidden>{opt.count}</span>
-            </button>
-          )
-        })}
+      <div className="cp-origin__chips" role="group" aria-label="اختر البلد">
+        {facet.options
+          .filter((opt) => opt.count > 0 || selected.includes(opt.value))
+          .map((opt) => {
+            const active = selected.includes(opt.value)
+            const disabled = opt.count === 0 && !active
+            return (
+              <button
+                key={opt.value}
+                type="button"
+                disabled={disabled}
+                onClick={() => onToggle(opt.value)}
+                className="cp-chip"
+                aria-pressed={active}
+              >
+                <span>{opt.value}</span>
+                <span className="cp-chip__n">{opt.count}</span>
+              </button>
+            )
+          })}
       </div>
     </section>
   )

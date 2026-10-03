@@ -1,29 +1,50 @@
 import { Link } from 'react-router-dom'
 import { brands, originMap } from '../../lib/catalog'
-import SectionHead from '../ui/SectionHead'
-import Reveal from '../ui/Reveal'
+
+const groups = (() => {
+  const m = new Map<string, typeof brands>()
+  for (const b of brands) m.set(b.originId, [...(m.get(b.originId) ?? []), b])
+  return [...m.entries()]
+    .map(([id, list]) => ({ id, name: originMap.get(id)?.name ?? '', list }))
+    .sort((a, b) => b.list.length - a.list.length || a.name.localeCompare(b.name, 'ar'))
+})()
 
 export default function BrandShowcase() {
   return (
-    <section className="hairline-t hairline-b bg-surface-muted/50 py-16 md:py-24">
-      <div className="container-x">
-        <SectionHead title="العلامات التجارية" intro="نوفّر منتجات من علامات متعددة المصادر، لتناسب مستويات الجودة والميزانية المختلفة." />
-        <div className="mt-10 grid grid-cols-2 gap-3.5 sm:grid-cols-3 lg:grid-cols-4">
-          {brands.map((b, i) => (
-            <Reveal key={b.id} delay={i * 25}>
-              <Link
-                to={`/products?brand=${encodeURIComponent(b.name)}`}
-                className="group flex flex-col justify-between gap-6 rounded-2xl border border-border bg-surface p-6 transition-colors duration-200 hover:border-ink/20"
-              >
-                <span className="text-[19px] font-medium tracking-wide text-foreground">{b.latin}</span>
-                <span className="flex items-center justify-between text-[13.5px] text-foreground-muted">
-                  {b.name}
-                  <span>{originMap.get(b.originId)?.name}</span>
-                </span>
-              </Link>
-            </Reveal>
-          ))}
+    <section className="aisle-sources" aria-labelledby="home-brands-heading">
+      <div className="container-x aisle-sources__grid">
+        <div className="aisle-sources__head">
+          <p className="aisle-eyebrow">حسب بلد المنشأ</p>
+          <h2 id="home-brands-heading" className="aisle-h2 mt-3">
+            العلامات التجارية
+          </h2>
+          <p className="aisle-small aisle-sources__intro">
+            نوفّر منتجات من علامات متعددة المصادر، لتناسب مستويات الجودة والميزانية المختلفة.
+          </p>
         </div>
+
+        <ul className="aisle-origins">
+          {groups.map((g) => (
+            <li key={g.id} className="aisle-origin aisle-reveal">
+              <div className="aisle-origin__name">
+                <h3 className="aisle-origin__title">{g.name}</h3>
+                <span className="aisle-num" dir="ltr">
+                  {String(g.list.length).padStart(2, '0')}
+                </span>
+              </div>
+              <ul className="aisle-brands">
+                {g.list.map((b) => (
+                  <li key={b.id}>
+                    <Link to={`/products?brand=${encodeURIComponent(b.name)}`} className="aisle-brand">
+                      <span className="aisle-brand__latin">{b.latin}</span>
+                      <span className="aisle-brand__ar">{b.name}</span>
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </li>
+          ))}
+        </ul>
       </div>
     </section>
   )
