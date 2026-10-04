@@ -104,6 +104,7 @@ export const SUBMITTED_ORDER_STATUS_LABEL: Record<SubmittedOrderStatus, string> 
 export function formatSubmittedOrderWhen(iso: string): string {
   try {
     return new Intl.DateTimeFormat('ar-EG', {
+      numberingSystem: 'latn',
       dateStyle: 'medium',
       timeStyle: 'short',
     }).format(new Date(iso))

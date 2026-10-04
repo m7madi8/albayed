@@ -71,7 +71,7 @@ export function CatalogCategoryTabs({
             aria-current={active ? 'page' : undefined}
           >
             {t.label}
-            <span className="catalog-section-tab__count">{t.count.toLocaleString('ar-EG')}</span>
+            <span className="catalog-section-tab__count">{t.count.toLocaleString('en-US')}</span>
           </Link>
         )
       })}

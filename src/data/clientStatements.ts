@@ -21,5 +21,5 @@ export function getClientStatement(_clientId: string): ClientStatement | null {
 }
 
 export function formatStatementAmount(value: number): string {
-  return `${value.toLocaleString('ar-EG')} ₪`
+  return `${value.toLocaleString('en-US')} ₪`
 }

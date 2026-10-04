@@ -49,7 +49,7 @@ export function rememberClientProductPrice(clientPhone: string, productId: strin
 }
 
 export function formatUnitPrice(amount: number): string {
-  return `${amount.toLocaleString('ar-EG', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} ₪`
+  return `${amount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} ₪`
 }
 
 export function lineTotal(unitPrice: number, quantity: number): number {

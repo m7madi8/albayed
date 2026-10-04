@@ -185,6 +185,7 @@ export function saveChequeReceiptVoucher(input: {
 export function formatReceiptVoucherWhen(iso: string): string {
   try {
     return new Intl.DateTimeFormat('ar-PS', {
+      numberingSystem: 'latn',
       dateStyle: 'medium',
       timeStyle: 'short',
     }).format(new Date(iso))
@@ -201,6 +202,7 @@ export function formatChequeReceiptWhen(iso: string): string {
 export function formatReceiptCashAmount(amount: number): string {
   try {
     return new Intl.NumberFormat('ar-PS', {
+      numberingSystem: 'latn',
       style: 'currency',
       currency: 'ILS',
       maximumFractionDigits: 2,

@@ -25,11 +25,11 @@ export default function CatalogIntro({
         <h1 className="cp-intro__title">{title}</h1>
         {intro ? <p className="cp-intro__lead">{intro}</p> : null}
         <p className="cp-intro__meta">
-          <strong>{count.toLocaleString('ar-EG')}</strong> صنف معروض
+          <strong>{count.toLocaleString('en-US')}</strong> صنف معروض
           {totalPool != null && totalPool !== count ? (
             <>
               {' '}
-              من <strong>{totalPool.toLocaleString('ar-EG')}</strong>
+              من <strong>{totalPool.toLocaleString('en-US')}</strong>
             </>
           ) : null}
           {query ? (
@@ -52,7 +52,7 @@ export default function CatalogIntro({
           <span className="cp-search-trigger__hint" aria-hidden>Ctrl K</span>
         </button>
         <span className="cp-stat-pill" aria-hidden>
-          {count.toLocaleString('ar-EG')} نتيجة
+          {count.toLocaleString('en-US')} نتيجة
         </span>
       </div>
     </header>

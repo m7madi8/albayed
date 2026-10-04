@@ -25,6 +25,7 @@ function greetingForHour(h: number) {
 
 function formatToday() {
   return new Intl.DateTimeFormat('ar-EG', {
+    numberingSystem: 'latn',
     weekday: 'long',
     day: 'numeric',
     month: 'long',

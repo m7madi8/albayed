@@ -123,6 +123,7 @@ export function disbursementExpenseTitle(v: DisbursementVoucher): string {
 export function formatDisbursementVoucherWhen(iso: string): string {
   try {
     return new Intl.DateTimeFormat('ar-PS', {
+      numberingSystem: 'latn',
       dateStyle: 'medium',
       timeStyle: 'short',
     }).format(new Date(iso))

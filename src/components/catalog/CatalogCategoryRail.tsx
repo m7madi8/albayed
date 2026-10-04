@@ -33,7 +33,7 @@ export default function CatalogCategoryRail({
               aria-current={active ? 'page' : undefined}
             >
               <span className="cp-cat-card__label">{t.label}</span>
-              <span className="cp-cat-card__count">{t.count.toLocaleString('ar-EG')}</span>
+              <span className="cp-cat-card__count">{t.count.toLocaleString('en-US')}</span>
             </Link>
           )
         })}

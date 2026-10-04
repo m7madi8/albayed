@@ -16,7 +16,7 @@ export const company = {
     whatsapp: '+970 00 000 0000',
     email: 'info@example.com',
     address: 'فلسطين — العنوان التفصيلي يُضاف لاحقًا',
-    hours: 'السبت – الخميس، ٨:٠٠ – ١٧:٠٠',
+    hours: 'السبت – الخميس، 8:00 – 17:00',
   },
 }
 

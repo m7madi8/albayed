@@ -16,7 +16,7 @@ export default function FavoritesPage() {
             <p className="cp-intro__kicker">كتالوج المندوب</p>
             <h1 className="cp-intro__title">المفضلة</h1>
             <p className="cp-intro__meta">
-              <strong>{products.length.toLocaleString('ar-EG')}</strong> صنف محفوظ للعرض
+              <strong>{products.length.toLocaleString('en-US')}</strong> صنف محفوظ للعرض
             </p>
           </div>
           <div className="cp-intro__actions">

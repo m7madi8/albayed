@@ -35,7 +35,7 @@ export default function CatalogResultsBar({
   return (
     <div className="cp-results-bar">
       <p className="cp-results-bar__count">
-        <strong>{total.toLocaleString('ar-EG')}</strong> منتج في هذه القائمة
+        <strong>{total.toLocaleString('en-US')}</strong> منتج في هذه القائمة
       </p>
       <div className="cp-results-bar__tools">
         {filterSlot}
