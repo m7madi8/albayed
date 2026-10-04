@@ -632,6 +632,97 @@
     border-color: var(--btn-border-hover);
   }
 
+  /* سندات القبض / الصرف — اختيار النوع */
+  .voucher-kind-field {
+    margin: 0;
+  }
+  .voucher-kind {
+    display: grid;
+    gap: 8px;
+  }
+  .voucher-kind--cols-2 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .voucher-kind--cols-3 {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+  @media (max-width: 380px) {
+    .voucher-kind--cols-3 {
+      grid-template-columns: 1fr;
+    }
+  }
+  .voucher-kind__option {
+    display: flex;
+    min-height: 5.25rem;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    padding: 10px 8px 12px;
+    border-radius: 12px;
+    border: 1px solid var(--btn-border-soft);
+    background: var(--surface);
+    color: var(--foreground-secondary);
+    text-align: center;
+    transition:
+      background-color var(--duration-ui) var(--ease-calm),
+      border-color var(--duration-ui) var(--ease-calm),
+      color var(--duration-ui) var(--ease-calm),
+      box-shadow var(--duration-ui) var(--ease-calm);
+  }
+  @media (hover: hover) {
+    .voucher-kind__option:hover:not(.voucher-kind__option--selected) {
+      border-color: var(--btn-border-hover);
+      background: var(--surface-muted);
+      color: var(--foreground);
+    }
+  }
+  .voucher-kind__option--selected {
+    border-color: color-mix(in srgb, var(--accent) 55%, var(--border));
+    background: var(--accent-soft);
+    color: var(--foreground);
+    box-shadow:
+      inset 0 0 0 1px color-mix(in srgb, var(--accent) 22%, transparent),
+      0 1px 0 color-mix(in srgb, var(--foreground) 4%, transparent);
+  }
+  .voucher-kind__option:focus-visible {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 18%, transparent);
+  }
+  .voucher-kind__icon-wrap {
+    display: flex;
+    size: 2.25rem;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    background: color-mix(in srgb, var(--foreground) 5%, transparent);
+    color: var(--foreground-muted);
+    transition:
+      background-color var(--duration-ui) var(--ease-calm),
+      color var(--duration-ui) var(--ease-calm);
+  }
+  .voucher-kind__option--selected .voucher-kind__icon-wrap {
+    background: color-mix(in srgb, var(--accent) 28%, var(--surface));
+    color: var(--accent-text);
+  }
+  .voucher-kind__label {
+    font-size: 13px;
+    font-weight: 600;
+    line-height: 1.35;
+    letter-spacing: 0.01em;
+  }
+  .voucher-kind__hint {
+    max-width: 100%;
+    padding-inline: 2px;
+    font-size: 11px;
+    line-height: 1.45;
+    color: var(--foreground-muted);
+  }
+  .voucher-kind__option--selected .voucher-kind__hint {
+    color: color-mix(in srgb, var(--foreground) 72%, var(--accent-text));
+  }
+
   .status-pill {
     display: inline-flex;
     align-items: center;
@@ -724,11 +815,11 @@
     top: 0;
     z-index: 40;
     border-bottom: 1px solid var(--border);
-    background: color-mix(in srgb, var(--background) 88%, var(--surface));
+    background: color-mix(in srgb, var(--background) 82%, var(--surface));
     transition:
-      background-color 120ms linear,
-      border-color 120ms linear,
-      box-shadow 120ms linear;
+      background-color 160ms var(--ease-calm),
+      border-color 160ms var(--ease-calm),
+      box-shadow 160ms var(--ease-calm);
   }
   @media (prefers-reduced-motion: reduce) {
     .app-header {
@@ -736,26 +827,35 @@
     }
   }
   .app-header--scrolled {
-    background: var(--surface);
+    background: color-mix(in srgb, var(--surface) 92%, transparent);
     border-bottom-color: var(--border-strong);
-    box-shadow: 0 1px 0 color-mix(in srgb, var(--border) 80%, transparent);
+    box-shadow:
+      0 1px 0 color-mix(in srgb, var(--border) 70%, transparent),
+      0 8px 24px -16px color-mix(in srgb, var(--foreground) 8%, transparent);
+    -webkit-backdrop-filter: blur(14px) saturate(1.15);
+    backdrop-filter: blur(14px) saturate(1.15);
   }
   .app-header--home:not(.app-header--scrolled) {
     border-bottom-color: transparent;
     background: transparent;
     box-shadow: none;
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
   }
   .app-header--home:not(.app-header--scrolled) .app-header-nav-link {
-    color: color-mix(in srgb, #ffffff 88%, transparent);
+    color: color-mix(in srgb, #ffffff 78%, transparent);
+  }
+  .app-header--home:not(.app-header--scrolled) .app-header-nav-link:hover {
+    color: #ffffff;
   }
   .app-header--home:not(.app-header--scrolled) .app-header-nav-link--active {
     color: #ffffff;
-    box-shadow: inset 0 -2px 0 var(--accent);
   }
   .app-header-container {
-    display: flex;
+    display: grid;
+    grid-template-columns: auto 1fr auto;
     align-items: center;
-    gap: var(--space-4);
+    gap: var(--space-3);
     width: 100%;
     max-width: var(--content-max);
     margin-inline: auto;
@@ -811,66 +911,72 @@
   .app-header-nav {
     display: none;
     min-width: 0;
-    flex: 1;
-    align-items: center;
-    justify-content: center;
-    gap: var(--space-5);
+    justify-self: center;
   }
   @media (min-width: 768px) {
     .app-header-nav {
       display: flex;
-      gap: var(--space-6);
+      justify-content: center;
     }
   }
-  @media (min-width: 1024px) {
-    .app-header-nav {
-      gap: 1.75rem;
-    }
+  .app-header-nav-rail {
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+    padding: 4px;
+    border-radius: 999px;
+    border: 1px solid color-mix(in srgb, var(--border) 85%, transparent);
+    background: color-mix(in srgb, var(--surface-muted) 55%, var(--surface));
+    box-shadow: inset 0 1px 0 color-mix(in srgb, var(--foreground) 4%, transparent);
   }
   .app-header-nav-link {
     position: relative;
     display: inline-flex;
     align-items: center;
-    min-height: 2.5rem;
-    padding: var(--space-2) var(--space-1);
+    justify-content: center;
+    min-height: 2.25rem;
+    padding: 0.4rem 1rem;
+    border-radius: 999px;
     font-family: var(--font-sans);
-    font-size: var(--font-label);
+    font-size: 0.8125rem;
     font-weight: var(--fw-medium);
-    line-height: var(--lh-label);
-    letter-spacing: var(--ls-label);
+    line-height: 1.35;
+    letter-spacing: 0.01em;
     color: var(--foreground-secondary);
     white-space: nowrap;
-    transition: color 200ms var(--ease-calm);
+    transition:
+      color 180ms var(--ease-calm),
+      background-color 180ms var(--ease-calm),
+      box-shadow 180ms var(--ease-calm);
   }
   @media (min-width: 1024px) {
     .app-header-nav-link {
-      font-size: 0.9375rem;
-      padding-inline: var(--space-2);
+      min-height: 2.375rem;
+      padding-inline: 1.125rem;
+      font-size: 0.875rem;
     }
   }
   @media (hover: hover) {
-    .app-header-nav-link:hover {
+    .app-header-nav-link:hover:not(.app-header-nav-link--active) {
       color: var(--foreground);
+      background: color-mix(in srgb, var(--foreground) 5%, transparent);
     }
   }
   .app-header-nav-link:focus-visible {
     outline: none;
     color: var(--foreground);
     box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 22%, transparent);
-    border-radius: var(--radius-sm);
   }
   .app-header-nav-link--active {
-    color: var(--accent-dark);
-    font-weight: var(--fw-medium);
+    color: var(--foreground);
+    font-weight: var(--fw-semibold);
+    background: var(--surface);
+    box-shadow:
+      0 1px 2px color-mix(in srgb, var(--foreground) 8%, transparent),
+      inset 0 0 0 1px color-mix(in srgb, var(--border) 70%, transparent);
   }
   .app-header-nav-link--active::after {
-    content: '';
-    position: absolute;
-    inset-inline: var(--space-2);
-    bottom: 6px;
-    height: 2px;
-    border-radius: 1px;
-    background: var(--accent);
+    content: none;
   }
   .app-header-menu-btn {
     display: inline-flex;
@@ -973,11 +1079,9 @@
     align-items: center;
     justify-content: flex-end;
     gap: var(--space-2);
-    margin-inline-start: auto;
   }
   @media (min-width: 768px) {
     .app-header-actions {
-      margin-inline-start: 0;
       gap: var(--space-2);
     }
   }

@@ -46,6 +46,8 @@ function pathMatches(pathname: string, href: string, end?: boolean) {
   const base = href.split('?')[0]
   if (end) return pathname === base
   if (base === '/dashboard/customers') return pathname === base || pathname.startsWith(`${base}/`)
+  if (base === '/dashboard/receipts') return pathname === base || pathname.startsWith(`${base}/`)
+  if (base === '/dashboard/disbursements') return pathname === base || pathname.startsWith(`${base}/`)
   return pathname === base || pathname.startsWith(`${base}/`)
 }
 

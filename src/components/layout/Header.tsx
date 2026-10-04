@@ -6,14 +6,8 @@ import Logo from '../ui/Logo'
 import { useVisitOrder } from '../../context/VisitOrderContext'
 import { buildOrderEntryPath } from '../../lib/orderEntry'
 import { isCatalogPath } from '../../lib/catalogPath'
-
-const HEADER_NAV = [
-  { href: '/products', label: 'الكتالوج', match: (p: string) => isCatalogPath(p) && p !== '/visit-order' },
-  { href: '/brands', label: 'العلامات', match: (p: string) => p.startsWith('/brands') },
-  { href: '/about', label: 'من نحن', match: (p: string) => p === '/about' },
-  { href: '/contact', label: 'تواصل', match: (p: string) => p === '/contact' },
-  { href: '/dashboard/overview', label: 'نظام المبيعات', match: (p: string) => p.startsWith('/dashboard') },
-] as const
+import { PUBLIC_HEADER_NAV } from '../../lib/publicHeaderNav'
+import { CATALOG_FAVORITES_ENABLED } from '../../lib/catalogFeatures'
 
 const ICON_SIZE = 20
 const ICON_STROKE = 1.75
@@ -43,19 +37,21 @@ export default function Header({
         </div>
 
         <nav className="app-header-nav" aria-label="التنقل الرئيسي">
-          {HEADER_NAV.map((item) => {
-            const active = item.match(pathname)
-            return (
-              <Link
-                key={item.href}
-                to={item.href}
-                className={`app-header-nav-link${active ? ' app-header-nav-link--active' : ''}`}
-                aria-current={active ? 'page' : undefined}
-              >
-                {item.label}
-              </Link>
-            )
-          })}
+          <div className="app-header-nav-rail">
+            {PUBLIC_HEADER_NAV.map((item) => {
+              const active = item.match(pathname)
+              return (
+                <Link
+                  key={item.href}
+                  to={item.href}
+                  className={`app-header-nav-link${active ? ' app-header-nav-link--active' : ''}`}
+                  aria-current={active ? 'page' : undefined}
+                >
+                  {item.label}
+                </Link>
+              )
+            })}
+          </div>
         </nav>
 
         <div className="app-header-actions" role="group" aria-label="إجراءات سريعة">
@@ -67,7 +63,7 @@ export default function Header({
           >
             <Search size={ICON_SIZE} strokeWidth={ICON_STROKE} aria-hidden />
           </button>
-          {onCatalog && (
+          {CATALOG_FAVORITES_ENABLED && onCatalog ? (
             <Link
               to="/products/favorites"
               aria-label={favCount > 0 ? `المفضلة — ${favCount}` : 'المفضلة'}
@@ -80,7 +76,7 @@ export default function Header({
                 </span>
               )}
             </Link>
-          )}
+          ) : null}
           <Link
             to={buildOrderEntryPath(lineCount)}
             aria-label={lineCount > 0 ? `مراجعة العرض — ${lineCount} صنف` : 'الكتالوج'}

@@ -458,29 +458,31 @@
   gap: 1rem 0.85rem;
   grid-template-columns: repeat(2, minmax(0, 1fr));
 }
-@media (min-width: 768px) {
+@media (min-width: 640px) {
   .sh-grid {
-    gap: 1.25rem 1rem;
+    gap: 1.15rem 1rem;
   }
 }
 @media (min-width: 768px) {
   .sh-grid {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.25rem 1.1rem;
   }
 }
 @media (min-width: 1024px) {
   .sh-grid {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 }
 @media (min-width: 1280px) {
   .sh-grid {
-    grid-template-columns: repeat(5, minmax(0, 1fr));
+    grid-template-columns: repeat(4, minmax(0, 1fr));
   }
 }
 @media (min-width: 1536px) {
   .sh-grid {
-    grid-template-columns: repeat(6, minmax(0, 1fr));
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 1.35rem 1.15rem;
   }
 }
 
@@ -494,11 +496,28 @@
 .sh-tag__plate {
   position: relative;
   aspect-ratio: 1 / 1;
-  background: linear-gradient(165deg, #f6f5f1 0%, #ebe9e3 100%);
+  min-height: clamp(10.5rem, 42vw, 15rem);
+  background: linear-gradient(165deg, #f8f7f3 0%, #ebe9e3 100%);
   border: 1px solid var(--sh-line);
   border-radius: var(--sh-radius);
   overflow: hidden;
   transition: border-color 160ms ease, box-shadow 160ms ease;
+}
+.sh-tag__plate .catalog-stage-frame--card {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: clamp(0.75rem, 5%, 1.35rem);
+}
+.sh-tag__plate .catalog-stage-frame--card.catalog-stage-frame--photo .catalog-stage-frame__photo {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  mix-blend-mode: normal;
+}
+.sh-tag__plate .catalog-stage-frame__art {
+  transform: scale(calc(var(--catalog-art-zoom, 1) * 1.06));
 }
 .sh-tag:hover .sh-tag__plate,
 .sh-tag:focus-within .sh-tag__plate {
@@ -545,7 +564,7 @@
 }
 .sh-tag__name {
   margin: 0;
-  font-size: 0.9375rem;
+  font-size: clamp(0.9375rem, 0.85rem + 0.35vw, 1.0625rem);
   font-weight: 600;
   line-height: 1.4;
   color: var(--sh-ink);
@@ -650,6 +669,18 @@
   border-radius: var(--sh-radius);
   background: var(--sh-surface);
   font-weight: 700;
+  color: var(--sh-ink);
+}
+.sh-order-qty .product-quick-add--compact {
+  border-radius: var(--sh-radius);
+  background: var(--sh-copper);
+  border-color: transparent;
+  color: #fff;
+  box-shadow: none;
+}
+.sh-order-qty .product-quick-add--compact:hover {
+  background: color-mix(in srgb, var(--sh-copper) 88%, #000);
+  color: #fff;
 }
 .sh-order-qty span {
   min-width: 1.5rem;

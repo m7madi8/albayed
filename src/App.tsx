@@ -13,6 +13,7 @@ import AboutPage from './pages/AboutPage'
 import ContactPage from './pages/ContactPage'
 import BrandsPage from './pages/BrandsPage'
 import NotFound from './pages/NotFound'
+import { CATALOG_FAVORITES_ENABLED } from './lib/catalogFeatures'
 
 export default function App() {
   return (
@@ -20,7 +21,7 @@ export default function App() {
       <Route element={<Layout />}>
         <Route index element={<Home />} />
         <Route path="products" element={<ProductsPage />} />
-        <Route path="products/favorites" element={<FavoritesPage />} />
+        <Route path="products/favorites" element={CATALOG_FAVORITES_ENABLED ? <FavoritesPage /> : <Navigate to="/products" replace />} />
         <Route path="products/:slug" element={<ProductDetailPage />} />
         <Route path="category/:slug" element={<CategoryPage />} />
         <Route path="visit-order" element={<VisitOrderPage />} />

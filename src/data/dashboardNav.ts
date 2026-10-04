@@ -41,6 +41,7 @@ export const DASHBOARD_NAV: DashboardNavItem[] = [
     children: [{ id: 'customers-new', label: 'إنشاء عميل جديد', href: '/dashboard/customers?new=1', icon: 'user-plus' }],
   },
   { id: 'receipts', label: 'سندات القبض', href: '/dashboard/receipts', icon: 'receipt' },
+  { id: 'disbursements', label: 'سندات الصرف', href: '/dashboard/disbursements', icon: 'wallet' },
   { id: 'orders', label: 'الطلبيات', href: '/dashboard/orders', icon: 'clipboard-list' },
 ]
 

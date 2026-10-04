@@ -14,6 +14,7 @@ import ProductStage from '../components/catalog/ProductStage'
 import ProductGallery from '../components/catalog/ProductGallery'
 import SpecTable from '../components/catalog/SpecTable'
 import FavoriteToggle from '../components/catalog/FavoriteToggle'
+import { CATALOG_FAVORITES_ENABLED } from '../lib/catalogFeatures'
 import AppStickyDock from '../components/layout/AppStickyDock'
 import { useAddToOrderFlow } from '../components/order/useAddToOrderFlow'
 import { useVisitOrder } from '../context/VisitOrderContext'
@@ -105,9 +106,11 @@ function ProductDetailView({ product }: { product: Product }) {
               <h1 className="pdp-title display">{product.name}</h1>
               <p className="pdp-type">{product.type}</p>
             </div>
-            <div className="pdp-fav shrink-0">
-              <FavoriteToggle productId={product.id} />
-            </div>
+            {CATALOG_FAVORITES_ENABLED ? (
+              <div className="pdp-fav shrink-0">
+                <FavoriteToggle productId={product.id} />
+              </div>
+            ) : null}
           </div>
 
           <div className="pdp-meta-grid mt-4">

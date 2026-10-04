@@ -1,5 +1,6 @@
 import { Star } from 'lucide-react'
 import { useCatalogEngagement } from '../../context/CatalogEngagementContext'
+import { CATALOG_FAVORITES_ENABLED } from '../../lib/catalogFeatures'
 
 export default function FavoriteToggle({
   productId,
@@ -9,6 +10,8 @@ export default function FavoriteToggle({
   className?: string
 }) {
   const { isFavorite, toggleFavorite } = useCatalogEngagement()
+  if (!CATALOG_FAVORITES_ENABLED) return null
+
   const on = isFavorite(productId)
 
   return (

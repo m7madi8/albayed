@@ -1,15 +1,17 @@
 import type { Product } from '../../data/types'
 import { Link } from 'react-router-dom'
-import { Copy, Check, Plus } from 'lucide-react'
+import { Copy, Check } from 'lucide-react'
 import { useCallback, useState } from 'react'
 import { availabilityLabel, brandOf, originOf } from '../../lib/catalog'
 import { productCardSpecLine } from '../../lib/productCardPresentation'
 import { ORDER_UNIT_LABEL } from '../../lib/orderUnits'
-import { useAddToOrderFlow } from '../order/useAddToOrderFlow'
 import { useVisitOrder } from '../../context/VisitOrderContext'
-import { activateRepMode, readRepModeActive } from '../../lib/catalogRepMode'
+import { readRepModeActive } from '../../lib/catalogRepMode'
+import { useProductQuickAdd } from '../../lib/useProductQuickAdd'
+import { CATALOG_FAVORITES_ENABLED } from '../../lib/catalogFeatures'
 import FavoriteToggle from './FavoriteToggle'
 import ProductStage from './ProductStage'
+import { ProductQuickAddTrigger } from './ProductQuickAddButton'
 
 function specRows(product: Product): { label: string; value: string }[] {
   const rows: { label: string; value: string }[] = []
@@ -29,12 +31,12 @@ export default function ProductCard({ product }: { product: Product }) {
   const rows = specRows(product)
   const [copied, setCopied] = useState(false)
   const { lineCount } = useVisitOrder()
+  const quick = useProductQuickAdd(product)
 
   const showRep = readRepModeActive() || lineCount > 0
-  const { tryOpen, modal, hasClient, inOrder } = useAddToOrderFlow(product.id, product.name)
   const inOrderLabel =
-    inOrder.length > 0 && hasClient
-      ? inOrder.map((l) => `${l.quantity} ${ORDER_UNIT_LABEL[l.unit]}`).join(' · ')
+    quick.inOrder.length > 0 && quick.hasClient
+      ? quick.inOrder.map((l) => `${l.quantity} ${ORDER_UNIT_LABEL[l.unit]}`).join(' · ')
       : null
 
   const showAvailPill = limited || unavailable
@@ -51,17 +53,40 @@ export default function ProductCard({ product }: { product: Product }) {
     }
   }, [product.id])
 
-  const requestClient = (e: React.MouseEvent) => {
-    e.preventDefault()
-    activateRepMode()
-    window.dispatchEvent(new Event('al-bayed-open-client-bar'))
-  }
-
   return (
     <article className={`cp-card${unavailable ? ' cp-card--unavailable' : ''}`}>
-      <div className="cp-card__top">
+      <div className="cp-card__media-wrap">
+        <Link to={`/products/${product.slug}`} className="cp-card__media" aria-label={`تفاصيل ${product.name}`}>
+          {showAvailPill ? (
+            <span className={`cp-card__badge${limited ? ' cp-card__badge--warn' : ''}`}>
+              {availabilityLabel[product.availability]}
+            </span>
+          ) : null}
+          <div className="catalog-stage cp-card__stage">
+            <ProductStage product={product} density="card" />
+          </div>
+        </Link>
+        {CATALOG_FAVORITES_ENABLED ? (
+          <div className="cp-card__media-tools">
+            <FavoriteToggle productId={product.id} className="cp-card__fav" />
+          </div>
+        ) : null}
+        {!unavailable ? (
+          <ProductQuickAddTrigger
+            variant="card-overlay"
+            productName={product.name}
+            inCart={quick.totalQty > 0}
+            totalQty={quick.totalQty}
+            onQuickAdd={quick.onQuickAdd}
+          />
+        ) : null}
+      </div>
+
+      <div className="cp-card__body">
         <div className="cp-card__sku-row">
-          <p className="cp-card__sku" dir="ltr">{product.id}</p>
+          <p className="cp-card__sku" dir="ltr">
+            {product.id}
+          </p>
           <button
             type="button"
             className="cp-card__sku-copy focus-ring"
@@ -71,21 +96,6 @@ export default function ProductCard({ product }: { product: Product }) {
             {copied ? <Check size={14} aria-hidden /> : <Copy size={14} aria-hidden />}
           </button>
         </div>
-        <FavoriteToggle productId={product.id} />
-      </div>
-
-      <Link to={`/products/${product.slug}`} className="cp-card__media" aria-label={`تفاصيل ${product.name}`}>
-        {showAvailPill ? (
-          <span className={`cp-card__badge${limited ? ' cp-card__badge--warn' : ''}`}>
-            {availabilityLabel[product.availability]}
-          </span>
-        ) : null}
-        <div className="catalog-stage catalog-stage--ratio">
-          <ProductStage product={product} density="card" />
-        </div>
-      </Link>
-
-      <div className="cp-card__body">
         <p className="cp-card__source">
           {brand.name} · {origin.name}
         </p>
@@ -93,7 +103,7 @@ export default function ProductCard({ product }: { product: Product }) {
           {product.name}
         </Link>
         {rows.length > 0 ? (
-          <dl>
+          <dl className="cp-card__spec-list">
             {rows.map((r) => (
               <div key={r.label} className="cp-card__spec-row">
                 <dt>{r.label}</dt>
@@ -114,17 +124,14 @@ export default function ProductCard({ product }: { product: Product }) {
           ) : (
             <span />
           )}
-          {showRep ? (
-            hasClient && !unavailable ? (
-              <button type="button" onClick={tryOpen} className="cp-card__action">
-                <Plus size={16} aria-hidden />
-                أضف
-              </button>
-            ) : !unavailable ? (
-              <button type="button" onClick={requestClient} className="cp-card__action cp-card__action--ghost">
-                حدّد العميل
-              </button>
-            ) : null
+          {showRep && !unavailable ? (
+            <ProductQuickAddTrigger
+              variant="inline"
+              productName={product.name}
+              inCart={quick.totalQty > 0}
+              totalQty={quick.totalQty}
+              onQuickAdd={quick.onQuickAdd}
+            />
           ) : (
             <Link to={`/products/${product.slug}`} className="cp-card__link-quiet">
               التفاصيل
@@ -133,7 +140,7 @@ export default function ProductCard({ product }: { product: Product }) {
         </footer>
       </div>
 
-      {modal}
+      {quick.modal}
     </article>
   )
 }

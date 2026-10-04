@@ -3,6 +3,7 @@ import OverviewDashboard from '../components/dashboard/OverviewDashboard'
 import CustomersDashboard from '../components/dashboard/CustomersDashboard'
 import OrdersDashboard from '../components/dashboard/OrdersDashboard'
 import ReceiptVouchersDashboard from '../components/dashboard/ReceiptVouchersDashboard'
+import DisbursementVouchersDashboard from '../components/dashboard/DisbursementVouchersDashboard'
 import SettingsPanel from '../components/dashboard/SettingsPanel'
 export default function DashboardPage() {
   const { section } = useParams<'section'>()
@@ -12,6 +13,7 @@ export default function DashboardPage() {
   if (section === 'overview') return <OverviewDashboard />
   if (section === 'customers') return <CustomersDashboard />
   if (section === 'receipts') return <ReceiptVouchersDashboard />
+  if (section === 'disbursements') return <DisbursementVouchersDashboard />
   if (section === 'order') return <Navigate to="/products" replace />
   if (section === 'orders') return <OrdersDashboard />
   if (section === 'settings') return <SettingsPanel />

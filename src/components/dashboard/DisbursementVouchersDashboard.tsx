@@ -1,17 +1,17 @@
 import { useState } from 'react'
-import { ChevronLeft, Plus, Receipt } from 'lucide-react'
-import { useChequeReceiptVouchers } from '../../hooks/useChequeReceiptVouchers'
+import { ChevronLeft, Plus, Wallet } from 'lucide-react'
+import { useDisbursementVouchers } from '../../hooks/useDisbursementVouchers'
 import {
-  formatReceiptCashAmount,
-  formatReceiptVoucherWhen,
-  RECEIPT_PAYMENT_KIND_LABEL,
-  type ReceiptVoucher,
-} from '../../lib/chequeReceiptVouchers'
+  disbursementExpenseTitle,
+  formatDisbursementAmount,
+  formatDisbursementVoucherWhen,
+  type DisbursementVoucher,
+} from '../../lib/disbursementVouchers'
 import { btn } from '../../lib/buttonStyles'
-import NewChequeReceiptModal from './NewChequeReceiptModal'
+import NewDisbursementVoucherModal from './NewDisbursementVoucherModal'
 
-function VoucherDetail({ voucher, onBack }: { voucher: ReceiptVoucher; onBack: () => void }) {
-  const kindLabel = RECEIPT_PAYMENT_KIND_LABEL[voucher.kind]
+function VoucherDetail({ voucher, onBack }: { voucher: DisbursementVoucher; onBack: () => void }) {
+  const title = disbursementExpenseTitle(voucher)
 
   return (
     <div className="sales-os-section">
@@ -21,12 +21,9 @@ function VoucherDetail({ voucher, onBack }: { voucher: ReceiptVoucher; onBack: (
       </button>
 
       <div>
-        <p className="text-[12px] font-medium tracking-wide text-foreground-muted">سند قبض · {kindLabel}</p>
-        <h1 className="display mt-1 text-[1.5rem] text-foreground">{voucher.clientName}</h1>
-        <p className="mt-2 text-[13px] text-foreground-muted">{formatReceiptVoucherWhen(voucher.createdAt)}</p>
-        {voucher.cashAmount != null ? (
-          <p className="mt-2 text-[15px] font-medium text-foreground">{formatReceiptCashAmount(voucher.cashAmount)}</p>
-        ) : null}
+        <p className="text-[12px] font-medium tracking-wide text-foreground-muted">سند صرف · {title}</p>
+        <h1 className="display mt-1 text-[1.5rem] text-foreground">{formatDisbursementAmount(voucher.amount)}</h1>
+        <p className="mt-2 text-[13px] text-foreground-muted">{formatDisbursementVoucherWhen(voucher.createdAt)}</p>
       </div>
 
       <div className="ios-tile mt-6 px-4 py-4">
@@ -34,24 +31,20 @@ function VoucherDetail({ voucher, onBack }: { voucher: ReceiptVoucher; onBack: (
         <p className="mt-2 whitespace-pre-wrap text-[15px] leading-7 text-foreground">{voucher.notes}</p>
       </div>
 
-      {voucher.chequeImageDataUrl ? (
-        <div className="ios-tile mt-4 overflow-hidden p-0">
-          <p className="border-b border-border px-4 py-3 text-[13px] font-medium text-foreground-secondary">
-            صورة الشيك
-          </p>
-          <img
-            src={voucher.chequeImageDataUrl}
-            alt={`صورة شيك — ${voucher.clientName}`}
-            className="max-h-[min(70vh,520px)] w-full object-contain bg-surface-muted"
-          />
-        </div>
-      ) : null}
+      <div className="ios-tile mt-4 overflow-hidden p-0">
+        <p className="border-b border-border px-4 py-3 text-[13px] font-medium text-foreground-secondary">صورة الوصل</p>
+        <img
+          src={voucher.receiptImageDataUrl}
+          alt={`صورة وصل — ${title}`}
+          className="max-h-[min(70vh,520px)] w-full object-contain bg-surface-muted"
+        />
+      </div>
     </div>
   )
 }
 
-export default function ReceiptVouchersDashboard() {
-  const { vouchers, refresh } = useChequeReceiptVouchers()
+export default function DisbursementVouchersDashboard() {
+  const { vouchers, refresh } = useDisbursementVouchers()
   const [modalOpen, setModalOpen] = useState(false)
   const [selectedId, setSelectedId] = useState<string | null>(null)
 
@@ -66,9 +59,9 @@ export default function ReceiptVouchersDashboard() {
       <header className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
         <div>
           <p className="text-[12px] font-medium tracking-wide text-foreground-muted">المالية</p>
-          <h1 className="display mt-1 text-[1.5rem] text-foreground lg:text-[1.75rem]">سندات القبض</h1>
+          <h1 className="display mt-1 text-[1.5rem] text-foreground lg:text-[1.75rem]">سندات الصرف</h1>
           <p className="mt-2 max-w-lg text-[14px] leading-7 text-foreground-muted">
-            نقدي، شيك، أو كلاهما — مع اسم العميل وملاحظات. صورة الشيك كاملة إلزامية عند تضمين شيك.
+            مصروفات المندوب مثل المحروقات — مع المبلغ والملاحظات وصورة الوصل.
           </p>
         </div>
         <button
@@ -77,7 +70,7 @@ export default function ReceiptVouchersDashboard() {
           className={btn('primary', 'h-11 gap-2 rounded-[10px] px-5 text-[14px]')}
         >
           <Plus size={18} strokeWidth={2} aria-hidden />
-          سند قبض جديد
+          سند صرف جديد
         </button>
       </header>
 
@@ -87,19 +80,17 @@ export default function ReceiptVouchersDashboard() {
             className="mx-auto flex size-14 items-center justify-center rounded-[12px] border border-border bg-surface-muted text-foreground-muted"
             aria-hidden
           >
-            <Receipt size={28} strokeWidth={1.5} />
+            <Wallet size={28} strokeWidth={1.5} />
           </span>
-          <p className="mt-5 text-[16px] font-medium text-foreground">لا توجد سندات قبض</p>
+          <p className="mt-5 text-[16px] font-medium text-foreground">لا توجد سندات صرف</p>
           <p className="mx-auto mt-2 max-w-md text-[14px] leading-7 text-foreground-muted">
-            لم يُسجَّل أي سند بعد. استخدم «سند قبض جديد» واختر نوع القبض.
+            سجّل محروقات أو مصروفاً آخر وأرفق صورة الوصل.
           </p>
         </div>
       ) : (
         <div className="ios-list">
           {vouchers.map((v) => {
-            const kindLabel = RECEIPT_PAYMENT_KIND_LABEL[v.kind]
-            const cash =
-              v.cashAmount != null ? ` · ${formatReceiptCashAmount(v.cashAmount)}` : ''
+            const title = disbursementExpenseTitle(v)
             return (
               <button
                 key={v.id}
@@ -108,11 +99,10 @@ export default function ReceiptVouchersDashboard() {
                 className="ios-list-row flex w-full items-center justify-between gap-3 text-right"
               >
                 <span className="min-w-0">
-                  <span className="block text-[15px] font-medium text-foreground">{v.clientName}</span>
+                  <span className="block text-[15px] font-medium text-foreground">{title}</span>
                   <span className="mt-0.5 line-clamp-2 text-[13px] text-foreground-muted">{v.notes}</span>
                   <span className="mt-1 block text-[12px] text-foreground-secondary">
-                    {formatReceiptVoucherWhen(v.createdAt)} · {kindLabel}
-                    {cash}
+                    {formatDisbursementVoucherWhen(v.createdAt)} · {formatDisbursementAmount(v.amount)}
                   </span>
                 </span>
                 <ChevronLeft size={18} className="shrink-0 text-foreground-muted" aria-hidden />
@@ -122,7 +112,7 @@ export default function ReceiptVouchersDashboard() {
         </div>
       )}
 
-      <NewChequeReceiptModal open={modalOpen} onClose={() => setModalOpen(false)} onSaved={refresh} />
+      <NewDisbursementVoucherModal open={modalOpen} onClose={() => setModalOpen(false)} onSaved={refresh} />
     </div>
   )
 }

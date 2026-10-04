@@ -10,7 +10,7 @@ export default function ProductGridSkeleton({
       <div className="sh-grid" aria-hidden>
         {Array.from({ length: count }, (_, i) => (
           <div key={i} className="sh-tag">
-            <div className="sh-tag__plate skeleton-shimmer" style={{ minHeight: '11rem' }} />
+            <div className="sh-tag__plate skeleton-shimmer" style={{ minHeight: 'clamp(10.5rem, 42vw, 15rem)' }} />
             <div className="sh-tag__body">
               <div className="skeleton-shimmer" style={{ height: 12, width: '40%', marginBottom: 8 }} />
               <div className="skeleton-shimmer" style={{ height: 16, width: '90%' }} />

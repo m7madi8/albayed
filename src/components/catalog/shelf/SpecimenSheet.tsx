@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom'
 import type { Product } from '../../../data/types'
 import { availabilityLabel, brandOf, headlineSpec } from '../../../lib/catalog'
 import ProductStage from '../ProductStage'
-import InlineOrderControl from './InlineOrderControl'
+import SpecimenSheetOrderCell from './SpecimenSheetOrderCell'
 import { groupCatalogShelf } from '../../../lib/groupCatalogShelf'
 import { formatCatalogNum } from '../../../lib/catalogCounts'
 
@@ -51,12 +51,7 @@ export default function SpecimenSheet({ products }: { products: Product[] }) {
                     <td dir="ltr" className="sh-sheet__sku">{spec}</td>
                     <td>{showAvail ? availabilityLabel[p.availability] : '—'}</td>
                     <td>
-                      <InlineOrderControl
-                        productId={p.id}
-                        productSlug={p.slug}
-                        productName={p.name}
-                        unavailable={p.availability === 'out_of_stock'}
-                      />
+                      <SpecimenSheetOrderCell product={p} />
                     </td>
                   </tr>
                 )

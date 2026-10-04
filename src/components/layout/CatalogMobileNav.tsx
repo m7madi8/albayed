@@ -3,6 +3,8 @@ import { Home, LayoutGrid, Menu, Search, Star } from 'lucide-react'
 import { useCatalogEngagement } from '../../context/CatalogEngagementContext'
 import { useVisitOrder } from '../../context/VisitOrderContext'
 import { isCatalogPath } from '../../lib/catalogPath'
+import { CATALOG_FAVORITES_ENABLED } from '../../lib/catalogFeatures'
+
 const ITEMS = [
   { id: 'home', href: '/', label: 'الرئيسية', icon: Home, match: (p: string) => p === '/' },
   {
@@ -29,9 +31,11 @@ export default function CatalogMobileNav({
   const { lineCount } = useVisitOrder()
   const favCount = favoriteIds.length
 
+  const items = ITEMS.filter((item) => item.id !== 'favorites' || CATALOG_FAVORITES_ENABLED)
+
   return (
     <nav className="catalog-mobile-nav lg:hidden" aria-label="تنقل الكتالوج">
-      {ITEMS.map((item) => {
+      {items.map((item) => {
         if (item.id === 'search') {
           return (
             <button key={item.id} type="button" onClick={onSearch} className="catalog-mobile-nav__link focus-ring">
@@ -55,7 +59,7 @@ export default function CatalogMobileNav({
             : item.id === 'catalog' && lineCount > 0
               ? lineCount
               : undefined
-        const href = item.href!
+        const href = item.href
         return (
           <Link
             key={item.id}

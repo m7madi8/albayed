@@ -6,8 +6,10 @@ import type { Product } from '../../../data/types'
 import { availabilityLabel, brandOf, originOf } from '../../../lib/catalog'
 import { productCardSpecLine } from '../../../lib/productCardPresentation'
 import { materialCssVar, materialKeyForProduct } from '../../../lib/shelfMaterials'
+import { useProductQuickAdd } from '../../../lib/useProductQuickAdd'
 import ProductStage from '../ProductStage'
 import FavoriteToggle from '../FavoriteToggle'
+import { ProductQuickAddTrigger } from '../ProductQuickAddButton'
 import InlineOrderControl from './InlineOrderControl'
 
 export default function SpecimenTag({ product }: { product: Product }) {
@@ -19,6 +21,7 @@ export default function SpecimenTag({ product }: { product: Product }) {
   const matKey = materialKeyForProduct(product)
   const matColor = materialCssVar(matKey)
   const [copied, setCopied] = useState(false)
+  const quick = useProductQuickAdd(product)
 
   const copySku = useCallback(async (e: MouseEvent) => {
     e.preventDefault()
@@ -50,6 +53,15 @@ export default function SpecimenTag({ product }: { product: Product }) {
             {copied ? <Check size={14} aria-hidden /> : <Copy size={14} aria-hidden />}
           </button>
         </div>
+        {!unavailable ? (
+          <ProductQuickAddTrigger
+            variant="shelf-overlay"
+            productName={product.name}
+            inCart={quick.totalQty > 0}
+            totalQty={quick.totalQty}
+            onQuickAdd={quick.onQuickAdd}
+          />
+        ) : null}
       </div>
       <div className="sh-tag__body">
         <p className="sh-tag__sku" dir="ltr">{product.id}</p>
@@ -67,14 +79,10 @@ export default function SpecimenTag({ product }: { product: Product }) {
               التفاصيل
             </Link>
           </div>
-          <InlineOrderControl
-            productId={product.id}
-            productSlug={product.slug}
-            productName={product.name}
-            unavailable={unavailable}
-          />
+          <InlineOrderControl product={product} quick={quick} />
         </footer>
       </div>
+      {quick.modal}
     </article>
   )
 }
